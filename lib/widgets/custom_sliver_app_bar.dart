@@ -1,13 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:orange_gallery/theme.dart';
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final String title;
-  final List<Widget>? actions;
 
-  CustomSliverAppBar(
-      {required this.expandedHeight, required this.title, this.actions});
+  CustomSliverAppBar({required this.expandedHeight, required this.title});
 
   @override
   Widget build(
@@ -36,7 +36,6 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
             left: 20,
             top: 75,
           ),
-          // alignment: Alignment.bottomLeft,
           child: Text(
             title,
             style: MyThemes.textTheme.headline5,
@@ -48,7 +47,12 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
     return Opacity(
       opacity: appear(shrinkOffset),
       child: AppBar(
-        title: Text(title),
+        backgroundColor: Colors.transparent,
+        elevation: 40,
+        title: Text(
+          title,
+          style: MyThemes.textTheme.headline6,
+        ),
         centerTitle: true,
       ),
     );

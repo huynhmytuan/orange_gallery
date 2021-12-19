@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orange_gallery/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:orange_gallery/providers/theme_provider.dart';
@@ -23,16 +24,33 @@ class ThemeSettingScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: SelectedList(
-          selectedIndex: ThemeProvider.themeModes.indexWhere(
-              (element) => element.values.first == themeProvider.getThemeMode),
-          onSelect: (index) {
-            themeProvider
-                .toggleTheme(ThemeProvider.themeModes[index].values.first);
-          },
-          children: ThemeProvider.themeModes
-              .map((e) => SelectItem(title: e.keys.first))
-              .toList(),
+        child: Column(
+          children: [
+            SelectedList(
+              selectedIndex: ThemeProvider.themeModes.indexWhere((element) =>
+                  element.values.first == themeProvider.getThemeMode),
+              onSelect: (index) {
+                themeProvider
+                    .toggleTheme(ThemeProvider.themeModes[index].values.first);
+              },
+              children: ThemeProvider.themeModes
+                  .map((e) => SelectItem(title: e.keys.first))
+                  .toList(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              child: Text(
+                'By default your theme will be adjust based on your device’s system settings.',
+                style: MyThemes.textTheme.bodyText2?.copyWith(
+                  color: greyColor60,
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

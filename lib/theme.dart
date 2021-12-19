@@ -11,7 +11,7 @@ class MyThemes {
     ),
     //Body in figma
     bodyText2: TextStyle(
-      fontSize: 8,
+      fontSize: 12,
     ),
     //Header in figma
     headline5: TextStyle(

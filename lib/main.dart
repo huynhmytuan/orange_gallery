@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+
 import 'package:orange_gallery/constants.dart';
 import 'package:orange_gallery/screens/album/albums_screen.dart';
 import 'package:orange_gallery/screens/favorite/favorites_screen.dart';
@@ -9,7 +13,8 @@ import 'package:orange_gallery/screens/photo/photos_screen.dart';
 import 'package:orange_gallery/screens/setting/setting_screen.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/theme.dart';
-import 'package:provider/provider.dart';
+
+import 'l10n/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +35,13 @@ class MyApp extends StatelessWidget {
           themeMode: themeProvider.getThemeMode,
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
+          supportedLocales: L10n.all,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
           home: const MyHomePage(),
         );
       },

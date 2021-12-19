@@ -7,6 +7,7 @@ class PhotosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      shrinkWrap: true,
       slivers: [
         SliverPersistentHeader(
           pinned: true,
@@ -21,17 +22,18 @@ class PhotosScreen extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       sliver: SliverGrid(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: 1,
-            crossAxisSpacing: 1,
-            crossAxisCount: 2,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 1,
+          crossAxisCount: 3,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Container(
+            color: Colors.amber,
           ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => Container(
-              color: Colors.amber,
-            ),
-            childCount: 20,
-          )),
+          childCount: 20,
+        ),
+      ),
     );
   }
 }
