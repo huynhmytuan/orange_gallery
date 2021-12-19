@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:orange_gallery/constants.dart';
-import 'package:orange_gallery/providers/theme_provider.dart';
 
 import '../theme.dart';
 
