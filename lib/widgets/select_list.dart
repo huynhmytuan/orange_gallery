@@ -9,8 +9,10 @@ import '../theme.dart';
 class SelectedList extends StatefulWidget {
   final List<SelectItem> children;
   final ValueChanged<int>? onSelect;
+  int selectedIndex;
 
-  SelectedList({required this.children, this.onSelect, Key? key})
+  SelectedList(
+      {required this.children, this.onSelect, Key? key, this.selectedIndex = 0})
       : super(key: key);
 
   @override
@@ -18,7 +20,6 @@ class SelectedList extends StatefulWidget {
 }
 
 class _SelectedListState extends State<SelectedList> {
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,12 +42,12 @@ class _SelectedListState extends State<SelectedList> {
             return SelectItem(
               onTap: () {
                 setState(() {
-                  selectedIndex = index;
+                  widget.selectedIndex = index;
                 });
-                widget.onSelect?.call(selectedIndex);
+                widget.onSelect?.call(widget.selectedIndex);
               },
               title: widget.children[index].title,
-              isSelected: (selectedIndex == index),
+              isSelected: (widget.selectedIndex == index) ? true : false,
             );
           },
         ),
@@ -65,7 +66,6 @@ class SelectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // borderRadius: BorderRadius.circular(15),
     return ListTile(
       onTap: () {
         onTap?.call();

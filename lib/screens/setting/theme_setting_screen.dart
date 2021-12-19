@@ -24,6 +24,8 @@ class ThemeSettingScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SelectedList(
+          selectedIndex: ThemeProvider.themeModes.indexWhere(
+              (element) => element.values.first == themeProvider.getThemeMode),
           onSelect: (index) {
             themeProvider
                 .toggleTheme(ThemeProvider.themeModes[index].values.first);

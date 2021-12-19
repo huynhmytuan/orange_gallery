@@ -5,8 +5,13 @@ class PhotosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Photos'),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: Text('Hello'),
+          expandedHeight: 200,
+        )
+      ],
     );
   }
 }
