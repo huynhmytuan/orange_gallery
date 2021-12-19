@@ -2,8 +2,8 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:orange_gallery/constants.dart';
+
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/screens/setting/theme_setting_screen.dart';
 import 'package:orange_gallery/theme.dart';
