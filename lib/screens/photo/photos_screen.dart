@@ -10,7 +10,7 @@ class PhotosScreen extends StatelessWidget {
       slivers: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: CustomSliverAppBar(expandedHeight: 200, title: 'title'),
+          delegate: CustomSliverAppBar(expandedHeight: 200, title: 'Photos'),
         ),
         buildImages(),
       ],
