@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'package:orange_gallery/constants.dart';
@@ -14,10 +14,21 @@ import 'package:orange_gallery/screens/setting/setting_screen.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/theme.dart';
 
-import 'l10n/l10n.dart';
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('vi', 'VI'),
+      ],
+      path:
+          'assets/translations', // <-- change the path of the translation files
+      fallbackLocale: const Locale('en', 'US'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,13 +46,9 @@ class MyApp extends StatelessWidget {
           themeMode: themeProvider.getThemeMode,
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
-          supportedLocales: L10n.all,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           home: const MyHomePage(),
         );
       },
@@ -59,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final screens = {
     {
-      'title': 'Photos',
+      'title': 'photo_title',
       'icon': Icons.photo_outlined,
       'screen': PhotosScreen(),
     },
@@ -83,16 +90,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          statusBarIconBrightness:
-              Theme.of(context).primaryColorBrightness == Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light,
-          statusBarBrightness: Theme.of(context).primaryColorBrightness,
-        ),
-        child:
-            screens.elementAt(_selectedIndex).values.whereType<Widget>().first,
-      ),
+          value: SystemUiOverlayStyle(
+            statusBarIconBrightness:
+                Theme.of(context).primaryColorBrightness == Brightness.light
+                    ? Brightness.dark
+                    : Brightness.light,
+            statusBarBrightness: Theme.of(context).primaryColorBrightness,
+          ),
+          child: SafeArea(
+            child: screens
+                .elementAt(_selectedIndex)
+                .values
+                .whereType<Widget>()
+                .first,
+          )),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).bottomAppBarColor,
@@ -118,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   .map(
                     (e) => GButton(
                       icon: e.values.whereType<IconData>().first,
-                      text: e['title'].toString(),
+                      text: tr(e['title'].toString()),
                     ),
                   )
                   .toList(),

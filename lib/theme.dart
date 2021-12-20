@@ -15,13 +15,13 @@ class MyThemes {
     ),
     //Header in figma
     headline5: TextStyle(
-      fontSize: 30,
+      fontSize: 25,
       fontWeight: FontWeight.w700,
       color: orangeColor,
     ),
     //Title in figma
     headline6: TextStyle(
-      fontSize: 20,
+      fontSize: 15,
       fontWeight: FontWeight.w700,
     ),
     button: TextStyle(

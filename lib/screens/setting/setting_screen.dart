@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:orange_gallery/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/screens/setting/theme_setting_screen.dart';
@@ -79,7 +80,7 @@ class SettingScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 75, left: 10),
             child: Text(
-              'Settings',
+              tr('setting_title'),
               style: MyThemes.textTheme.headline5,
             ),
           ),
@@ -111,6 +112,9 @@ class SettingScreen extends StatelessWidget {
                 .first,
           ),
           _buildSettingTitle(
+            onTap: () {
+              context.locale = Locale('en', 'US');
+            },
             context: context,
             icon: Icons.language,
             title: 'Language',
@@ -127,6 +131,9 @@ class SettingScreen extends StatelessWidget {
             ),
           ),
           _buildSettingTitle(
+            onTap: () {
+              context.locale = Locale('vi', 'VI');
+            },
             context: context,
             icon: Icons.info_outline_rounded,
             title: 'About us',
