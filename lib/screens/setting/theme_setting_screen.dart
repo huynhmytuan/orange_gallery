@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/constants.dart';
 import 'package:provider/provider.dart';
 
+import 'package:orange_gallery/constants.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/widgets/select_list.dart';
@@ -15,7 +16,7 @@ class ThemeSettingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Theme',
+          "settings.theme.title".tr(),
           style: MyThemes.textTheme.headline6,
         ),
         foregroundColor: Theme.of(context).primaryColor,
@@ -34,7 +35,7 @@ class ThemeSettingScreen extends StatelessWidget {
                     .toggleTheme(ThemeProvider.themeModes[index].values.first);
               },
               children: ThemeProvider.themeModes
-                  .map((e) => SelectItem(title: e.keys.first))
+                  .map((e) => SelectItem(title: e.keys.first.tr()))
                   .toList(),
             ),
             Padding(
@@ -43,7 +44,7 @@ class ThemeSettingScreen extends StatelessWidget {
                 vertical: 10,
               ),
               child: Text(
-                'By default your theme will be adjust based on your device’s system settings.',
+                "settings.theme.description".tr(),
                 style: MyThemes.textTheme.bodyText2?.copyWith(
                   color: greyColor60,
                   fontWeight: FontWeight.w100,

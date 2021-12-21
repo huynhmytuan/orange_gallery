@@ -11,7 +11,7 @@ class AlbumsScreen extends StatelessWidget {
     return NestedScrollView(
       headerSliverBuilder: (context, value) {
         return [
-          CustomAppBar(title: tr('photo_title')),
+          CustomAppBar(title: tr('albums.title')),
         ];
       },
       body: buildImages(),

@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'package:orange_gallery/constants.dart';
+import 'package:orange_gallery/screens/setting/about_us_screen.dart';
+import 'package:orange_gallery/screens/setting/language_setting_screen.dart';
+import 'package:orange_gallery/widgets/app_bar.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/screens/setting/theme_setting_screen.dart';
 import 'package:orange_gallery/theme.dart';
@@ -20,7 +22,7 @@ class SettingScreen extends StatelessWidget {
     Function? onTap,
   }) {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
         onTap: () {
@@ -29,7 +31,7 @@ class SettingScreen extends StatelessWidget {
         child: Card(
           child: Container(
             height: 60,
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +42,7 @@ class SettingScreen extends StatelessWidget {
                       icon,
                       color: greyColor60,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     Text(
@@ -53,9 +55,9 @@ class SettingScreen extends StatelessWidget {
                   children: [
                     Text(
                       value,
-                      style: TextStyle(color: greyColor60),
+                      style: const TextStyle(color: greyColor60),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.chevron_right,
                       color: orangeColor,
                     ),
@@ -72,73 +74,83 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 75, left: 10),
-            child: Text(
-              tr('setting_title'),
-              style: MyThemes.textTheme.headline5,
-            ),
+    return NestedScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      headerSliverBuilder: (context, value) {
+        return [
+          CustomAppBar(
+            title: tr('settings.title'),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 50, left: 10),
-            child: Text(
-              'PREFERENCES',
-              style: TextStyle(
-                color: greyColor60,
-                fontSize: 12,
+        ];
+      },
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 50, left: 10),
+              child: Text(
+                "settings.preferences".tr(),
+                style: const TextStyle(
+                  color: greyColor60,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          _buildSettingTitle(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ThemeSettingScreen(),
-              ));
-            },
-            context: context,
-            icon: (themeProvider.getThemeMode == ThemeMode.dark)
-                ? CupertinoIcons.moon_stars
-                : Icons.light_mode,
-            title: 'Theme',
-            value: ThemeProvider.themeModes
-                .firstWhere(
-                    (mode) => mode.values.first == themeProvider.getThemeMode)
-                .keys
-                .first,
-          ),
-          _buildSettingTitle(
-            onTap: () {
-              context.locale = Locale('en', 'US');
-            },
-            context: context,
-            icon: Icons.language,
-            title: 'Language',
-            value: 'English',
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 50, left: 10),
-            child: Text(
-              'INFO',
-              style: TextStyle(
-                color: greyColor60,
-                fontSize: 12,
+            _buildSettingTitle(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ThemeSettingScreen(),
+                ));
+              },
+              context: context,
+              icon: (themeProvider.getThemeMode == ThemeMode.dark)
+                  ? CupertinoIcons.moon_stars
+                  : Icons.light_mode,
+              title: 'settings.theme.title'.tr(),
+              value: ThemeProvider.themeModes
+                  .firstWhere(
+                      (mode) => mode.values.first == themeProvider.getThemeMode)
+                  .keys
+                  .first
+                  .tr(),
+            ),
+            _buildSettingTitle(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LanguageSettingScreen(),
+                ));
+              },
+              context: context,
+              icon: Icons.language,
+              title: "settings.languages.title".tr(),
+              value: (context.locale == const Locale('vi', 'VI'))
+                  ? 'Tiếng Việt'
+                  : 'English',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 50, left: 10),
+              child: Text(
+                "settings.info".tr(),
+                style: const TextStyle(
+                  color: greyColor60,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          _buildSettingTitle(
-            onTap: () {
-              context.locale = Locale('vi', 'VI');
-            },
-            context: context,
-            icon: Icons.info_outline_rounded,
-            title: 'About us',
-          ),
-        ],
+            _buildSettingTitle(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AboutUsScreen(),
+                ));
+              },
+              context: context,
+              icon: Icons.info_outline_rounded,
+              title: "settings.about_us.title".tr(),
+            ),
+          ],
+        ),
       ),
     );
   }

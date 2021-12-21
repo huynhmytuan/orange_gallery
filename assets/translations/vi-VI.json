@@ -1,4 +1,31 @@
 {
-    "photo_title" : "Ảnh",
-    "setting_title" : "Cài đặt"
+    "photos": {
+        "title": "Ảnh"
+    },
+    "favorites": {
+        "title": "Yêu Thích"
+    },
+    "albums": {
+        "title": "Thư Viện"
+    },
+    "settings":{
+        "title" : "Cài Đặt",
+        "preferences" : "Cài đặt chung",
+        "info": "Thông tin",
+        "theme": {
+            "title": "Giao Diện",
+            "system": "Mặc định",
+            "light": "Giao diện sáng",
+            "dark": "Giao diện tối",
+            "description": "Mặc định giao diện của bạn sẽ được đổi theo cài đặt của máy."
+        },
+         "languages": {
+            "title": "Ngôn Ngữ",
+            "english": "Tiếng Anh",
+            "vietnamese" : "Tiếng Việt"
+        },
+        "about_us": {
+            "title": "Thông tin ứng dụng"
+        }
+    }
 }

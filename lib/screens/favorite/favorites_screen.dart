@@ -11,7 +11,7 @@ class FavoritesScreen extends StatelessWidget {
     return NestedScrollView(
       headerSliverBuilder: (context, value) {
         return [
-          CustomAppBar(title: tr('photo_title')),
+          CustomAppBar(title: tr('favorites.title')),
         ];
       },
       body: buildImages(),

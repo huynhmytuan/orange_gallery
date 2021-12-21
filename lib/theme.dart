@@ -15,7 +15,7 @@ class MyThemes {
     ),
     //Header in figma
     headline5: TextStyle(
-      fontSize: 25,
+      fontSize: 20,
       fontWeight: FontWeight.w700,
       color: orangeColor,
     ),

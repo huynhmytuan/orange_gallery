@@ -42,6 +42,7 @@ class _SelectedListState extends State<SelectedList> {
                   widget.selectedIndex = index;
                 });
                 widget.onSelect?.call(widget.selectedIndex);
+                widget.children[index].onTap?.call();
               },
               title: widget.children[index].title,
               isSelected: (widget.selectedIndex == index) ? true : false,

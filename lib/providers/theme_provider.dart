@@ -1,27 +1,50 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import 'package:hive/hive.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static final List<Map<String, ThemeMode>> themeModes = [
     {
-      'System': ThemeMode.system,
+      "settings.theme.system": ThemeMode.system,
     },
     {
-      'Light': ThemeMode.light,
+      "settings.theme.light": ThemeMode.light,
     },
     {
-      'Dark': ThemeMode.dark,
+      "settings.theme.dark": ThemeMode.dark,
     },
   ];
 
-  ThemeMode _themeMode = ThemeMode.system;
+  late ThemeMode _themeMode;
+
+  final box = Hive.box('Settings');
 
   ThemeMode get getThemeMode {
-    return _themeMode;
+    var mode = box.get('theme');
+    if (mode == null) {
+      _themeMode = ThemeMode.system;
+      String themeModeTitle = themeModes
+          .firstWhere((mode) => mode.values.first == _themeMode)
+          .keys
+          .first;
+      box.put('theme', themeModeTitle);
+      return _themeMode;
+    } else {
+      var modeValues = box.get('theme');
+      _themeMode = themeModes
+          .firstWhere((mode) => mode.containsKey(modeValues))
+          .values
+          .first;
+      return _themeMode;
+    }
   }
 
   void toggleTheme(ThemeMode mode) {
     _themeMode = mode;
+    String themeModeTitle = themeModes
+        .firstWhere((mode) => mode.values.first == _themeMode)
+        .keys
+        .first;
+    box.put('theme', themeModeTitle);
     notifyListeners();
   }
 }

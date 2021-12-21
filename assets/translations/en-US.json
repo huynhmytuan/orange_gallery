@@ -1,4 +1,31 @@
 {
-    "photo_title" : "Photos",
-    "setting_title" : "Settings"
+    "photos": {
+        "title": "Photos"
+    },
+    "favorites": {
+        "title": "Favorites"
+    },
+    "albums": {
+        "title": "Albums"
+    },
+    "settings":{
+        "title" : "Settings",
+        "preferences" : "PREFERENCES",
+        "info": "INFO",
+        "theme": {
+            "title": "Theme",
+            "system": "System",
+            "light": "Light",
+            "dark": "Dark",
+            "description": "By default your theme will be adjust based on your device’s system settings."
+        },
+        "languages": {
+            "title": "Language",
+            "english": "English",
+            "vietnamese" : "Vietnamese"
+        },
+        "about_us": {
+            "title": "About us"
+        }
+    }
 }
