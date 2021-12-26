@@ -10,8 +10,10 @@ import 'package:orange_gallery/screens/album/albums_screen.dart';
 
 import 'package:orange_gallery/screens/photo/photos_screen.dart';
 import 'package:orange_gallery/screens/setting/setting_screen.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class MyHomePage extends StatefulWidget {
+  static const routeName = '/home';
   const MyHomePage({Key? key}) : super(key: key);
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -20,6 +22,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   late PageController _pageController;
+  bool _permission = false;
   final screens = {
     {
       'title': 'photos.label',
@@ -41,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
     _pageController = PageController();
   }
 

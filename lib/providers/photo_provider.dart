@@ -2,6 +2,7 @@ import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import 'dart:io' show Directory, File, Platform;
 
 import 'package:photo_manager/photo_manager.dart';
@@ -13,8 +14,13 @@ enum ACTION_TYPE {
 
 class PhotoProvider extends ChangeNotifier {
   List<AssetPathEntity> _albums = [];
+  List<AssetEntity> _photos = [];
 
   PhotoProvider() {
+    PhotoManager.startChangeNotify();
+    PhotoManager.addChangeCallback((value) {
+      _fetchAssets();
+    });
     _fetchAssets();
   }
 
@@ -47,24 +53,35 @@ class PhotoProvider extends ChangeNotifier {
 
   //Get all albums
   _fetchAssets() async {
-    await PhotoManager.getAssetPathList().then((albums) {
-      print(albums);
-      _albums.addAll(albums);
-    }, onError: (error) {
-      print('Sai gi do roi ne');
-    });
-
+    // albums.clear();
+    _albums = await PhotoManager.getAssetPathList();
     notifyListeners();
   }
 
   ///Return all albums
   List<AssetPathEntity> get albums {
-    if (_albums.isEmpty) {
-      _fetchAssets();
-      return _albums;
-    } else {
-      return _albums;
+    return _albums;
+  }
+
+  // void _getAllPhotos() async {
+  //   if (_albums.isEmpty) {
+  //     _fetchAssets();
+  //   } else {
+  //     _photos = await _albums[0].assetList;
+  //   }
+  // }
+
+  ///Return all photos in gallery
+  List<AssetEntity> get photos {
+    if (_albums.isNotEmpty) {
+      albums.first
+          .getAssetListRange(start: 0, end: albums.first.assetCount)
+          .then((value) {
+        _photos.addAll(value);
+        return _photos;
+      });
     }
+    return _photos;
   }
 
   ///Get an album by it's ID

@@ -48,6 +48,7 @@
 		<string>en</string>
 		<string>vi</string>
 	</array>
-	
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>App need your agree, can visit your album</string>
 </dict>
 </plist>
