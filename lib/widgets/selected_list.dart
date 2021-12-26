@@ -4,7 +4,7 @@ import 'package:orange_gallery/constants.dart';
 import '../theme.dart';
 
 class SelectedList extends StatefulWidget {
-  final List<SelectItem> children;
+  final List<SelectedItem> children;
   final ValueChanged<int>? onSelect;
   int selectedIndex;
 
@@ -36,7 +36,7 @@ class _SelectedListState extends State<SelectedList> {
           itemCount: widget.children.length,
           physics: const ScrollPhysics(),
           itemBuilder: (context, index) {
-            return SelectItem(
+            return SelectedItem(
               onTap: () {
                 setState(() {
                   widget.selectedIndex = index;
@@ -54,17 +54,19 @@ class _SelectedListState extends State<SelectedList> {
   }
 }
 
-class SelectItem extends StatelessWidget {
+class SelectedItem extends StatelessWidget {
   final String title;
   bool isSelected;
   Function? onTap;
-  SelectItem(
+  SelectedItem(
       {required this.title, this.isSelected = false, this.onTap, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.comfortable,
+      dense: true,
       onTap: () {
         onTap?.call();
       },

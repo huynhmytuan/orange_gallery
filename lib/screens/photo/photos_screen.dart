@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'package:orange_gallery/widgets/app_bar.dart';
+import 'package:orange_gallery/widgets/custom_app_bar.dart';
 
 class PhotosScreen extends StatelessWidget {
   const PhotosScreen({Key? key}) : super(key: key);
@@ -10,11 +10,13 @@ class PhotosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
+      scrollBehavior: const ScrollBehavior(
+        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+      ),
       headerSliverBuilder: (context, value) {
         return [
-          CustomAppBar(
-            title: tr('photos.title'),
-          ),
+          CustomAppBar(title: tr('photos.title')),
+          // TranslucentSliverAppBar(),
         ];
       },
       body: buildImages(),
@@ -34,8 +36,13 @@ class PhotosScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          staggeredTileBuilder: (int index) =>
-              StaggeredTile.count(2, index.isEven ? 2 : 1),
+          staggeredTileBuilder: (int index) {
+            if (index == 0) {
+              return StaggeredTile.count(4, 0.5);
+            } else {
+              return StaggeredTile.count(2, index.isEven ? 2 : 1);
+            }
+          },
           mainAxisSpacing: 4.0,
           crossAxisSpacing: 4.0,
         ));

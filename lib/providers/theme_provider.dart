@@ -18,8 +18,9 @@ class ThemeProvider extends ChangeNotifier {
 
   final box = Hive.box('Settings');
 
-  ThemeMode get getThemeMode {
+  Map get getThemeMode {
     var mode = box.get('theme');
+
     if (mode == null) {
       _themeMode = ThemeMode.system;
       String themeModeTitle = themeModes
@@ -27,14 +28,14 @@ class ThemeProvider extends ChangeNotifier {
           .keys
           .first;
       box.put('theme', themeModeTitle);
-      return _themeMode;
+      return {'title': themeModeTitle, 'value': _themeMode};
     } else {
       var modeValues = box.get('theme');
       _themeMode = themeModes
           .firstWhere((mode) => mode.containsKey(modeValues))
           .values
           .first;
-      return _themeMode;
+      return {'title': modeValues.toString(), 'value': _themeMode};
     }
   }
 

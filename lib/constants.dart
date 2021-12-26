@@ -15,3 +15,5 @@ const Color orangeColor = Color(0xFFFF6000);
 const Color orangeColor80 = Color(0xFFFE7235);
 const Color orangeColor60 = Color(0xFFF4730B);
 const Color orangeColor20 = Color(0xFFFFDFCB);
+
+const Color darkBlue = Color(0xFF26242e);

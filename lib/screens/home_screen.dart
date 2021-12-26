@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 
 import 'package:orange_gallery/constants.dart';
 import 'package:orange_gallery/screens/album/albums_screen.dart';
-import 'package:orange_gallery/screens/favorite/favorites_screen.dart';
+
 import 'package:orange_gallery/screens/photo/photos_screen.dart';
 import 'package:orange_gallery/screens/setting/setting_screen.dart';
 
@@ -19,19 +19,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  late PageController _pageController;
   final screens = {
     {
-      'title': 'photos.title',
-      'icon': Icons.photo_outlined,
+      'title': 'photos.label',
+      'icon': CupertinoIcons.photo_on_rectangle,
       'screen': PhotosScreen(),
     },
     {
-      'title': 'favorites.title',
-      'icon': Icons.favorite_border_rounded,
-      'screen': FavoritesScreen(),
-    },
-    {
-      'title': 'albums.title',
+      'title': 'albums.label',
       'icon': CupertinoIcons.square_stack_3d_down_right,
       'screen': AlbumsScreen(),
     },
@@ -43,8 +39,15 @@ class _MyHomePageState extends State<MyHomePage> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
   void dispose() {
     Hive.close();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -52,20 +55,31 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
-            statusBarIconBrightness:
-                Theme.of(context).primaryColorBrightness == Brightness.light
-                    ? Brightness.dark
-                    : Brightness.light,
-            statusBarBrightness: Theme.of(context).primaryColorBrightness,
-          ),
-          child: SafeArea(
-            child: screens
-                .elementAt(_selectedIndex)
-                .values
-                .whereType<Widget>()
-                .first,
-          )),
+        value: SystemUiOverlayStyle(
+          statusBarIconBrightness:
+              Theme.of(context).primaryColorBrightness == Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light,
+          statusBarBrightness: Theme.of(context).primaryColorBrightness,
+        ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeIn,
+              ),
+              child: child,
+            );
+          },
+          child: screens
+              .elementAt(_selectedIndex)
+              .values
+              .whereType<Widget>()
+              .first,
+        ),
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).bottomAppBarColor,
@@ -78,12 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
             child: GNav(
-              gap: 10,
-              iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              gap: 1,
+              iconSize: 20,
+              backgroundColor: Theme.of(context).bottomAppBarColor,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               duration: const Duration(milliseconds: 400),
+              curve: Curves.easeIn,
               activeColor: Theme.of(context).primaryColor,
               tabBackgroundColor: Theme.of(context).hoverColor,
               color: greyColor60,
@@ -92,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     (e) => GButton(
                       icon: e.values.whereType<IconData>().first,
                       text: tr(e['title'].toString()),
+                      gap: 10,
                     ),
                   )
                   .toList(),

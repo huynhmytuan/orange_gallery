@@ -1,12 +1,25 @@
 {
-    "photos": {
-        "title": "Photos"
+    "buttons":{
+        "see_all":"See All"
     },
-    "favorites": {
-        "title": "Favorites"
+    "photos": {
+        "label": "Photos",
+        "title": "My Photos"
     },
     "albums": {
-        "title": "Albums"
+        "label": "Albums",
+        "title": "My Albums",
+        "favorites": {
+            "title": "Favorites",
+            "favorites_album": "Favorites Album"
+        },
+        "suggestions":"People Suggestions",
+        "photo": {
+            "zero": "Empty",
+            "one" : "{} photo",
+            "many": "{} photos",
+            "other" : "{} photos"
+        }
     },
     "settings":{
         "title" : "Settings",
@@ -25,7 +38,10 @@
             "vietnamese" : "Vietnamese"
         },
         "about_us": {
-            "title": "About us"
+            "title": "About us",
+            "version" : "Version",
+            "dev_intro" : "Developer Team Introduce",
+            "license":  "Licenses"
         }
     }
 }

@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Orange Gallery',
-          themeMode: themeProvider.getThemeMode,
+          themeMode: themeProvider.getThemeMode['value'],
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
           localizationsDelegates: context.localizationDelegates,

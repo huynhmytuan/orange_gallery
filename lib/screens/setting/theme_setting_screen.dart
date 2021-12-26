@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:orange_gallery/constants.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/theme.dart';
-import 'package:orange_gallery/widgets/select_list.dart';
+import 'package:orange_gallery/widgets/selected_list.dart';
 
 class ThemeSettingScreen extends StatelessWidget {
   const ThemeSettingScreen({Key? key}) : super(key: key);
@@ -17,25 +17,21 @@ class ThemeSettingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "settings.theme.title".tr(),
-          style: MyThemes.textTheme.headline6,
         ),
-        foregroundColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).cardColor,
-        elevation: 1,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
             SelectedList(
               selectedIndex: ThemeProvider.themeModes.indexWhere((element) =>
-                  element.values.first == themeProvider.getThemeMode),
+                  element.values.first == themeProvider.getThemeMode['value']),
               onSelect: (index) {
                 themeProvider
                     .toggleTheme(ThemeProvider.themeModes[index].values.first);
               },
               children: ThemeProvider.themeModes
-                  .map((e) => SelectItem(title: e.keys.first.tr()))
+                  .map((e) => SelectedItem(title: e.keys.first.tr()))
                   .toList(),
             ),
             Padding(

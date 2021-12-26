@@ -1,12 +1,25 @@
 {
-    "photos": {
-        "title": "Ảnh"
+    "buttons":{
+        "see_all":"Xem thêm"
     },
-    "favorites": {
-        "title": "Yêu Thích"
+    "photos": {
+        "label": "Ảnh",
+        "title": "Ảnh của tôi"
     },
     "albums": {
-        "title": "Thư Viện"
+        "label": "Albums",
+        "title": "Album của tôi",
+        "favorites": {
+            "title": "Yêu Thích",
+            "favorites_album": "Ảnh Yêu Thích"
+        },
+        "suggestions":"Mọi người",
+        "photo": {
+            "zero": "Trống",
+            "one" : "{} ảnh",
+            "many": "{} ảnh",
+            "other" : "{} ảnh"
+        }
     },
     "settings":{
         "title" : "Cài Đặt",
@@ -25,7 +38,10 @@
             "vietnamese" : "Tiếng Việt"
         },
         "about_us": {
-            "title": "Thông tin ứng dụng"
+            "title": "Thông tin ứng dụng",
+            "version" : "Phiên bản",
+            "dev_intro" : "Nhà phát triển",
+            "license":  "Giấy phép"
         }
     }
 }
