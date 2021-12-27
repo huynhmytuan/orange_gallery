@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
@@ -66,14 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   : Brightness.light,
           statusBarBrightness: Theme.of(context).primaryColorBrightness,
         ),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              opacity: CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeIn,
-              ),
+        child: PageTransitionSwitcher(
+          duration: const Duration(milliseconds: 600),
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
               child: child,
             );
           },

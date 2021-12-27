@@ -19,9 +19,9 @@ class PhotoProvider extends ChangeNotifier {
   PhotoProvider() {
     PhotoManager.startChangeNotify();
     PhotoManager.addChangeCallback((value) {
-      _fetchAssets();
+      fetchAssets();
     });
-    _fetchAssets();
+    fetchAssets();
   }
 
   void _saveAsset(AssetEntity asset, String path, File file) {
@@ -52,9 +52,21 @@ class PhotoProvider extends ChangeNotifier {
   }
 
   //Get all albums
-  _fetchAssets() async {
-    // albums.clear();
-    _albums = await PhotoManager.getAssetPathList();
+  fetchAssets() async {
+    _albums.clear();
+    _albums = await PhotoManager.getAssetPathList(
+      type: RequestType.common,
+      filterOption: FilterOptionGroup(
+        orders: [
+          const OrderOption(type: OrderOptionType.createDate),
+        ],
+      ),
+    );
+    for (var a in _albums) {
+      print(a);
+    }
+    print(
+        '[PhotoProvider] [DEBUG] Load ${_albums.length} album(s) from device.');
     notifyListeners();
   }
 
@@ -63,24 +75,25 @@ class PhotoProvider extends ChangeNotifier {
     return _albums;
   }
 
-  // void _getAllPhotos() async {
-  //   if (_albums.isEmpty) {
-  //     _fetchAssets();
-  //   } else {
-  //     _photos = await _albums[0].assetList;
-  //   }
-  // }
-
   ///Return all photos in gallery
   List<AssetEntity> get photos {
-    if (_albums.isNotEmpty) {
-      albums.first
-          .getAssetListRange(start: 0, end: albums.first.assetCount)
-          .then((value) {
-        _photos.addAll(value);
+    PhotoManager.getAssetPathList(
+      onlyAll: true,
+      type: RequestType.common,
+      filterOption: FilterOptionGroup(
+        orders: [
+          const OrderOption(type: OrderOptionType.createDate),
+        ],
+      ),
+    ).then((albums) {
+      _photos.clear();
+      albums.first.assetList.then((assets) {
+        _photos.addAll(assets);
+        print(
+            '[PhotoProvider] [DEBUG] Load ${_photos.length} asset(s) from device.');
         return _photos;
       });
-    }
+    });
     return _photos;
   }
 
@@ -102,7 +115,7 @@ class PhotoProvider extends ChangeNotifier {
     if (Platform.isIOS) {
       PhotoManager.editor.iOS.createAlbum(albumName).then(
         (newAlbum) {
-          _fetchAssets();
+          fetchAssets();
           // PhotoManager.editor.android.
           return newAlbum!.id;
         },

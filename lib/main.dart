@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
-import 'package:orange_gallery/constants.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'package:orange_gallery/theme.dart';
+import 'package:orange_gallery/screens/missing_permission_screen.dart';
 import 'package:orange_gallery/providers/theme_provider.dart';
 import 'package:orange_gallery/providers/photo_provider.dart';
 import 'package:orange_gallery/screens/home_screen.dart';
@@ -83,67 +79,25 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ],
       builder: (context, child) {
         final themeProvider = Provider.of<ThemeProvider>(context);
-        return EasyLocalization(
-          supportedLocales: const [
-            Locale('en', 'US'),
-            Locale('vi', 'VI'),
-          ],
-          path: 'assets/translations',
-          fallbackLocale: const Locale('en', 'US'),
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Orange Gallery',
-            themeMode: themeProvider.getThemeMode['value'],
-            theme: MyThemes.lightTheme,
-            darkTheme: MyThemes.darkTheme,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            home: (_status) ? MyHomePage() : MissingPermissionScreen(),
-            routes: {
-              MyHomePage.routeName: (context) => MyHomePage(),
-              // PhotosScreen.routeName: (context) => PhotosScreen(),
-            },
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Orange Gallery',
+          themeMode: themeProvider.getThemeMode['value'],
+          theme: MyThemes.lightTheme,
+          darkTheme: MyThemes.darkTheme,
+          scrollBehavior: ScrollBehavior(
+            androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
           ),
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          home: (_status) ? MyHomePage() : MissingPermissionScreen(),
+          routes: {
+            MyHomePage.routeName: (context) => MyHomePage(),
+            // PhotosScreen.routeName: (context) => PhotosScreen(),
+          },
         );
       },
-    );
-  }
-}
-
-class MissingPermissionScreen extends StatelessWidget {
-  const MissingPermissionScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error_outline,
-                size: 100,
-                color: greyColor60,
-              ),
-              const Text(
-                'Something went wrong!\n We need access photos permissions to run this app.',
-                textAlign: TextAlign.center,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  PhotoManager.openSetting();
-                },
-                child: const Text(
-                  'Open App Settings',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

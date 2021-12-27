@@ -1,10 +1,16 @@
 {
+    "notice": {
+        "empty": "Hiện tại chưa có nội dung nào.",
+        "missing_permission": "Tôi cần bạn cấp quyền để có thể truy cập hình ảnh và video trong máy."
+    },
     "buttons":{
+        "open_settings" : "Mở Cài Đặt",
         "see_all":"Xem thêm"
     },
     "photos": {
         "label": "Ảnh",
-        "title": "Ảnh của tôi"
+        "title": "Ảnh của tôi",
+        "recent": "Gần đây"
     },
     "albums": {
         "label": "Albums",

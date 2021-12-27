@@ -1,10 +1,16 @@
 {
+    "notice": {
+        "empty": "No asset in here yet.",
+        "missing_permission": "We need permission to access your photos, videos."
+    },
     "buttons":{
+        "open_settings" : "Open App Settings",
         "see_all":"See All"
     },
     "photos": {
         "label": "Photos",
-        "title": "My Photos"
+        "title": "My Photos",
+        "recent": "Recent"
     },
     "albums": {
         "label": "Albums",

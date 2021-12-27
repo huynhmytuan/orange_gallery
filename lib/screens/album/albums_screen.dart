@@ -19,9 +19,6 @@ class AlbumsScreen extends StatelessWidget {
     PageController _pageCon =
         PageController(viewportFraction: 0.8, initialPage: 1);
     return NestedScrollView(
-      scrollBehavior: const ScrollBehavior(
-        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
-      ),
       headerSliverBuilder: (context, value) {
         return [
           CustomAppBar(

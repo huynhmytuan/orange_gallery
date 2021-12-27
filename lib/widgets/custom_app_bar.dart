@@ -45,7 +45,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).canvasColor,
           alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.only(bottom: 10, left: 20),
           height: 200,

@@ -65,8 +65,7 @@ class SelectedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      visualDensity: VisualDensity.comfortable,
-      dense: true,
+      enableFeedback: true,
       onTap: () {
         onTap?.call();
       },

@@ -74,9 +74,6 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return NestedScrollView(
-      scrollBehavior: const ScrollBehavior(
-        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
-      ),
       physics: const NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, value) {
         return [

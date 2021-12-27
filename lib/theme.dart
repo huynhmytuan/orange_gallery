@@ -38,6 +38,7 @@ class MyThemes {
     primaryColor: orangeColor,
     primarySwatch: Colors.deepOrange,
     scaffoldBackgroundColor: greyColor20,
+    canvasColor: greyColor20,
     cardTheme: CardTheme(
       color: Colors.white,
       shape: RoundedRectangleBorder(
@@ -57,6 +58,7 @@ class MyThemes {
       elevation: 0,
     ),
     hoverColor: orangeColor20,
+    splashColor: orangeColor20,
     dividerColor: greyColor40,
   );
 
@@ -68,7 +70,7 @@ class MyThemes {
     primaryColor: orangeColor,
     primarySwatch: Colors.deepOrange,
     scaffoldBackgroundColor: blackColor80,
-    backgroundColor: Colors.red,
+    canvasColor: blackColor80,
     cardColor: blackColor60,
     bottomAppBarColor: blackColor60,
     cardTheme: CardTheme(
@@ -90,6 +92,7 @@ class MyThemes {
       elevation: 0,
     ),
     hoverColor: blackColor80,
+    splashColor: orangeColor20,
     dividerColor: greyColor,
   );
 }
