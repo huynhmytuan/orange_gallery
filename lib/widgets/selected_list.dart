@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/constants.dart';
+import 'package:orange_gallery/utils/constants.dart';
 
 import '../theme.dart';
 

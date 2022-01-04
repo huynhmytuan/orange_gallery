@@ -12,7 +12,7 @@ A new Flutter project.
  1. **Providers:**
     - [ ] - Add new provider, models to manage data of AI (and favorites in android).
  2. **Photos Screen:**
-    - [ ] - View all assets as Grid-View with Month/Year as title.
+    - [x] - View all assets as Grid-View with Month/Year as title.
     - [ ] - Hold to select (Slide to multi select if can).
     - [ ] - Zoom in/out to increase/decrease numbers of MainAxisCount.
     - **Photo/Video FullPage:**

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/constants.dart';
+import 'package:orange_gallery/utils/constants.dart';
 import 'package:orange_gallery/theme.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -15,11 +15,10 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  var top = 0.0;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 110.0,
+      expandedHeight: MediaQuery.of(context).size.height * .15,
       floating: false,
       pinned: true,
       actions: widget.actions,

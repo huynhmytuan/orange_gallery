@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:orange_gallery/constants.dart';
-import 'package:orange_gallery/providers/theme_provider.dart';
+import 'package:orange_gallery/utils/constants.dart';
+import 'package:orange_gallery/view_models/theme_provider.dart';
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/widgets/selected_list.dart';
 

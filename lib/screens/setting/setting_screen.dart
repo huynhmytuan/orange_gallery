@@ -5,11 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'package:orange_gallery/constants.dart';
+import 'package:orange_gallery/utils/constants.dart';
 import 'package:orange_gallery/screens/setting/about_us_screen.dart';
 import 'package:orange_gallery/screens/setting/language_setting_screen.dart';
 
-import 'package:orange_gallery/providers/theme_provider.dart';
+import 'package:orange_gallery/view_models/theme_provider.dart';
 import 'package:orange_gallery/screens/setting/theme_setting_screen.dart';
 import 'package:orange_gallery/theme.dart';
 

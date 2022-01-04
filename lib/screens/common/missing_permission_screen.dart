@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-import 'package:orange_gallery/constants.dart';
+import 'package:orange_gallery/utils/constants.dart';
 
 class MissingPermissionScreen extends StatelessWidget {
   const MissingPermissionScreen({Key? key}) : super(key: key);

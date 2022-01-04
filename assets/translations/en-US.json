@@ -22,9 +22,10 @@
         "suggestions":"People Suggestions",
         "photo": {
             "zero": "Empty",
-            "one" : "{} photo",
-            "many": "{} photos",
-            "other" : "{} photos"
+            "one" : "{} Item",
+            "two": "{} Items",
+            "many": "{} Items",
+            "other" : "{} Items"
         }
     },
     "settings":{

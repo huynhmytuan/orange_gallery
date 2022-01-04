@@ -1,6 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-
-import 'constants.dart';
+import 'package:flutter/services.dart';
+import 'utils/constants.dart';
 
 class MyThemes {
   static const textTheme = TextTheme(
@@ -31,9 +32,14 @@ class MyThemes {
   );
 
   static final lightTheme = ThemeData(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
+      },
+    ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'OpenSans',
-    primaryColorBrightness: Brightness.light,
     brightness: Brightness.light,
     primaryColor: orangeColor,
     primarySwatch: Colors.deepOrange,
@@ -56,6 +62,12 @@ class MyThemes {
       backgroundColor: Colors.transparent,
       foregroundColor: orangeColor,
       elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xFF000000),
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     hoverColor: orangeColor20,
     splashColor: orangeColor20,
@@ -63,9 +75,14 @@ class MyThemes {
   );
 
   static final darkTheme = ThemeData(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
+      },
+    ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'OpenSans',
-    primaryColorBrightness: Brightness.dark,
     brightness: Brightness.dark,
     primaryColor: orangeColor,
     primarySwatch: Colors.deepOrange,
@@ -90,6 +107,12 @@ class MyThemes {
       ),
       backgroundColor: Colors.transparent,
       elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xFF000000),
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
     ),
     hoverColor: blackColor80,
     splashColor: orangeColor20,

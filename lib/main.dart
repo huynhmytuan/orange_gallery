@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 import 'package:hive/hive.dart';
+import 'package:orange_gallery/view_models/selector_provider.dart';
+import 'package:orange_gallery/screens/common/home_screen.dart';
+import 'package:orange_gallery/screens/common/missing_permission_screen.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'package:orange_gallery/theme.dart';
-import 'package:orange_gallery/screens/missing_permission_screen.dart';
-import 'package:orange_gallery/providers/theme_provider.dart';
-import 'package:orange_gallery/providers/photo_provider.dart';
-import 'package:orange_gallery/screens/home_screen.dart';
+import 'package:orange_gallery/view_models/theme_provider.dart';
+import 'package:orange_gallery/view_models/medias_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +19,7 @@ void main() async {
   Hive.init(directory.path);
   await Hive.openBox('Settings');
   await EasyLocalization.ensureInitialized();
+
   runApp(
     EasyLocalization(
       supportedLocales: const [
@@ -25,7 +28,7 @@ void main() async {
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en', 'US'),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -68,13 +71,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => PhotoProvider(),
+          create: (_) => MediasViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SelectorProvider(),
         ),
       ],
       builder: (context, child) {
@@ -85,15 +92,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           themeMode: themeProvider.getThemeMode['value'],
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
-          scrollBehavior: ScrollBehavior(
+          scrollBehavior: const ScrollBehavior(
             androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
           ),
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          home: (_status) ? MyHomePage() : MissingPermissionScreen(),
+          home:
+              (_status) ? const MyHomePage() : const MissingPermissionScreen(),
           routes: {
-            MyHomePage.routeName: (context) => MyHomePage(),
+            MyHomePage.routeName: (context) => const MyHomePage(),
             // PhotosScreen.routeName: (context) => PhotosScreen(),
           },
         );

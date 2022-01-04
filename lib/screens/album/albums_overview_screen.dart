@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/providers/photo_provider.dart';
+import 'package:orange_gallery/view_models/medias_view_model.dart';
 
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/widgets/custom_app_bar.dart';
@@ -13,12 +13,13 @@ class AlbumsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photoProvider = Provider.of<PhotoProvider>(context);
+    final photoProvider = Provider.of<MediasViewModel>(context);
 
     double _screenHeight = MediaQuery.of(context).size.height;
     PageController _pageCon =
         PageController(viewportFraction: 0.8, initialPage: 1);
     return NestedScrollView(
+      key: const PageStorageKey<String>('AlbumScreen'),
       headerSliverBuilder: (context, value) {
         return [
           CustomAppBar(
@@ -114,6 +115,7 @@ class AlbumsScreen extends StatelessWidget {
   }
 
   Widget _buildSuggestions() {
+    print("Build Image");
     return SectionWidget(
       leading: SectionButton(
         label: "buttons.see_all".tr(),

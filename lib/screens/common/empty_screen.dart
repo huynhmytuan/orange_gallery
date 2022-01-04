@@ -11,9 +11,12 @@ class EmptyScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/empty_box.png',
-            height: MediaQuery.of(context).size.height * .2,
+          Icon(
+            Icons.space_dashboard_rounded,
+            size: 80,
+            color: (Theme.of(context).brightness == Brightness.light)
+                ? Colors.black
+                : Colors.white,
           ),
           const SizedBox(height: 20),
           Text(tr('notice.empty')),

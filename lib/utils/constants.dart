@@ -17,3 +17,14 @@ const Color orangeColor60 = Color(0xFFF4730B);
 const Color orangeColor20 = Color(0xFFFFDFCB);
 
 const Color darkBlue = Color(0xFF26242e);
+
+//Enum
+
+///Define action when add/ create album on Android
+enum ACTION_TYPE {
+  ///Move asset to new album folder de delete asset at old folder
+  copy,
+
+  ///Make a copy of asset and add to new album folder.
+  move,
+}

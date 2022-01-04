@@ -22,9 +22,10 @@
         "suggestions":"Mọi người",
         "photo": {
             "zero": "Trống",
-            "one" : "{} ảnh",
-            "many": "{} ảnh",
-            "other" : "{} ảnh"
+            "one" : "{} Mục",
+            "two": "{} Mục",
+            "many": "{} Mục",
+            "other" : "{} Mục"
         }
     },
     "settings":{
