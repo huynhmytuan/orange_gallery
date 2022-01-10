@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'package:hive/hive.dart';
+
+import 'package:orange_gallery/view_models/albums_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
-import 'package:orange_gallery/screens/common/home_screen.dart';
+import 'package:orange_gallery/screens/home_screen.dart';
 import 'package:orange_gallery/screens/common/missing_permission_screen.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
@@ -79,6 +80,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider(
           create: (_) => MediasViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AlbumsViewModel(),
         ),
         ChangeNotifierProvider(
           create: (_) => SelectorProvider(),

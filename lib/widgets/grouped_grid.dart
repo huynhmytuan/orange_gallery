@@ -1,41 +1,29 @@
-import 'dart:io';
 import 'dart:typed_data';
+import 'package:orange_gallery/utils/string_extension.dart';
 
-import 'package:animations/animations.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:orange_gallery/view_models/media_asset_view_model.dart';
-
-import 'package:orange_gallery/view_models/selector_provider.dart';
-import 'package:orange_gallery/screens/common/gallery_screen.dart';
-
-import 'package:orange_gallery/utils/string_extension.dart';
-
-import 'package:orange_gallery/theme.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 
+import 'package:orange_gallery/screens/common/gallery_view_screen.dart';
+import 'package:orange_gallery/view_models/media_view_model.dart';
+import 'package:orange_gallery/view_models/selector_provider.dart';
+import 'package:orange_gallery/theme.dart';
+
 import '../utils/constants.dart';
 
-enum GROUP_TYPE {
-  day,
-  month,
-  year,
-}
-
 class GroupedGridView extends StatelessWidget {
-  List<MediaAssetViewModel> assets;
-  GROUP_TYPE groupType;
-  GroupedGridView({required this.assets, required this.groupType, Key? key})
-      : super(key: key);
+  List<MediaViewModel> assets;
+
+  GroupedGridView({required this.assets, Key? key}) : super(key: key);
 
   late ScrollController _scrollController = ScrollController();
 
-  List<List<MediaAssetViewModel>> _getSeparatedList(
-      List<MediaAssetViewModel> assets, GROUP_TYPE type) {
-    List<List<MediaAssetViewModel>> separatedAssets = assets.splitBetween(
+  List<List<MediaViewModel>> _getSeparatedList(List<MediaViewModel> assets) {
+    List<List<MediaViewModel>> separatedAssets = assets.splitBetween(
       (first, second) {
         if (first.createDt.month != second.createDt.month) {
           return true;
@@ -53,8 +41,7 @@ class GroupedGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<List<MediaAssetViewModel>> results =
-        _getSeparatedList(assets, groupType);
+    List<List<MediaViewModel>> results = _getSeparatedList(assets);
     return Padding(
       padding: const EdgeInsets.all(2),
       child: MediaQuery.removePadding(
@@ -72,7 +59,7 @@ class GroupedGridView extends StatelessWidget {
               children: [
                 Container(
                   height: 40,
-                  margin: const EdgeInsets.only(left: 10, top: 20, bottom: 10),
+                  margin: const EdgeInsets.only(left: 5, top: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -83,7 +70,7 @@ class GroupedGridView extends StatelessWidget {
                             : DateFormat.yMMMM(context.locale.languageCode)
                                 .format(assetCreatedTime)
                                 .capitalize(),
-                        style: MyThemes.textTheme.bodyText1,
+                        style: MyThemes.textTheme.bodyText2,
                       ),
                       Consumer<SelectorProvider>(
                         builder: (context, selectorProvider, child) {
@@ -124,8 +111,9 @@ class GroupedGridView extends StatelessWidget {
                       asset: results[index][itemIndex],
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => GalleryScreen(
+                          PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (_, _1, _2) => GalleryViewScreen(
                               assets: assets,
                               index: assets.indexOf(results[index][itemIndex]),
                             ),
@@ -148,7 +136,7 @@ class GroupedGridView extends StatelessWidget {
 class AssetThumbnail extends StatelessWidget {
   final Function? onTap;
   final Function? onLongPress;
-  final MediaAssetViewModel asset;
+  final MediaViewModel asset;
 
   const AssetThumbnail({
     Key? key,
@@ -168,9 +156,6 @@ class AssetThumbnail extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container(
             color: Theme.of(context).cardColor,
-            child: const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
           );
         } else {
           return InkWell(
@@ -199,7 +184,7 @@ class AssetThumbnail extends StatelessWidget {
                 ),
                 if (asset.mediaType == AssetType.video)
                   Positioned(
-                    top: 5,
+                    bottom: 5,
                     right: 5,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -209,7 +194,6 @@ class AssetThumbnail extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Text(
-                        // asset.duration.toString().split('.')[0],
                         ''.formatDuration(asset.duration),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
@@ -227,10 +211,10 @@ class AssetThumbnail extends StatelessWidget {
                           alignment: Alignment.topRight,
                           padding: const EdgeInsets.only(top: 5, right: 5),
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(.6),
+                            color: Colors.black.withOpacity(.3),
                           ),
                           child: const Icon(
-                            Icons.check_circle_outline,
+                            Icons.check_circle_rounded,
                             color: orangeColor,
                           ),
                         );

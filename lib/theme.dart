@@ -32,12 +32,13 @@ class MyThemes {
   );
 
   static final lightTheme = ThemeData(
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: <TargetPlatform, PageTransitionsBuilder>{
-        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-        TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
-      },
-    ),
+    // pageTransitionsTheme: const PageTransitionsTheme(
+    //   builders: <TargetPlatform, PageTransitionsBuilder>{
+    //     TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+    //     TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
+    //   },
+    // ),
+
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'OpenSans',
     brightness: Brightness.light,
@@ -69,17 +70,27 @@ class MyThemes {
         statusBarBrightness: Brightness.light,
       ),
     ),
+    sliderTheme: const SliderThemeData(
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
+      trackHeight: 3,
+      thumbColor: Colors.white,
+    ),
     hoverColor: orangeColor20,
     splashColor: orangeColor20,
     dividerColor: greyColor40,
   );
 
   static final darkTheme = ThemeData(
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: <TargetPlatform, PageTransitionsBuilder>{
-        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-        TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
-      },
+    // pageTransitionsTheme: const PageTransitionsTheme(
+    //   builders: <TargetPlatform, PageTransitionsBuilder>{
+    //     TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+    //     TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
+    //   },
+    // ),
+    sliderTheme: const SliderThemeData(
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
+      trackHeight: 3,
+      thumbColor: Colors.white,
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'OpenSans',
@@ -115,7 +126,7 @@ class MyThemes {
       ),
     ),
     hoverColor: blackColor80,
-    splashColor: orangeColor20,
+    splashColor: orangeColor80,
     dividerColor: greyColor,
   );
 }

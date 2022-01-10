@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:orange_gallery/screens/common/empty_screen.dart';
+import 'package:orange_gallery/utils/constants.dart';
 
 import 'package:orange_gallery/view_models/medias_view_model.dart';
 
@@ -10,7 +11,6 @@ import 'package:orange_gallery/theme.dart';
 
 import 'package:orange_gallery/widgets/custom_app_bar.dart';
 import 'package:orange_gallery/widgets/grouped_grid.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 
 class PhotosScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _PhotosScreenState extends State<PhotosScreen> {
                   TextButton.icon(
                     icon: const Icon(Icons.clear),
                     label: Text(
-                      plural('albums.photo', selector.amount),
+                      plural('albums.item', selector.amount),
                       style: MyThemes.textTheme.button,
                     ),
                     onPressed: () {
@@ -65,10 +65,7 @@ class _PhotosScreenState extends State<PhotosScreen> {
       case LoadingStatus.empty:
         return const EmptyScreen();
       case LoadingStatus.completed:
-        return GroupedGridView(
-          assets: mediasViewModel.mediaAssets,
-          groupType: GROUP_TYPE.month,
-        );
+        return GroupedGridView(assets: mediasViewModel.mediaAssets);
       default:
         return const Center(child: CircularProgressIndicator.adaptive());
     }

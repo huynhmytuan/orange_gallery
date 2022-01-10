@@ -1,11 +1,35 @@
 {
     "notice": {
         "empty": "No asset in here yet.",
-        "missing_permission": "We need permission to access your photos, videos."
+        "missing_permission": "We need permission to access your photos, videos.",
+        "delete_dialog": {
+            "title":{
+                "zero": "Error",
+                "one" : "Remove {} item to trash?",
+                "two": "Remove {} items to trash?",
+                "many": "Remove {} items to trash?",
+                "other" : "Remove {} items to trash?"
+            },
+            "content": "Once deleted can't be recovered. Are you sure about this action?"
+        },
+        "delete_album_fail": "This album can not be delete!"
     },
     "buttons":{
         "open_settings" : "Open App Settings",
-        "see_all":"See All"
+        "see_all":"See All",
+        "add_to_album": "Add to Album",
+        "new_album" : "New Album",
+        "favorite": "Add to favorite",
+        "remove_favorite": "Remove Favorite",
+        "share":"Share",
+        "delete":"Delete",
+        "cancel": "Cancel",
+        "move" : "Move",
+        "select" : "Select",
+        "add_items" : "Add Items",
+        "delete_album" : "Delete Album",
+        "back" : "Back",
+        "create" : "Create"
     },
     "photos": {
         "label": "Photos",
@@ -15,17 +39,32 @@
     "albums": {
         "label": "Albums",
         "title": "My Albums",
+        "last_modified":"Last modified at",
         "favorites": {
             "title": "Favorites",
             "favorites_album": "Favorites Album"
         },
         "suggestions":"People Suggestions",
-        "photo": {
+        "item": {
             "zero": "Empty",
             "one" : "{} Item",
             "two": "{} Items",
             "many": "{} Items",
             "other" : "{} Items"
+        },
+        "photo": {
+            "zero": "{} Image",
+            "one" : "{} Image",
+            "two": "{} Images",
+            "many": "{} Images",
+            "other" : "{} Images"
+        },
+        "video": {
+            "zero": "Empty",
+            "one" : "{} Video",
+            "two": "{} Videos",
+            "many": "{} Videos",
+            "other" : "{} Videos"
         }
     },
     "settings":{

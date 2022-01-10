@@ -5,6 +5,7 @@ const Color blackColor = Color(0xFF121212);
 const Color blackColor80 = Color(0xFF18181A);
 const Color blackColor60 = Color(0xFF242527);
 
+const Color greyColorBack = Color(0xFFecedf1);
 const Color greyColor = Color(0xFF505156);
 const Color greyColor80 = Color(0xFF63646A);
 const Color greyColor60 = Color(0xFF7F7F7F);
@@ -27,4 +28,17 @@ enum ACTION_TYPE {
 
   ///Make a copy of asset and add to new album folder.
   move,
+}
+
+///Using for detect choice from dialog
+enum ConfirmAction {
+  Cancel,
+  Accept,
+}
+
+///Using for detect load data state in some view model.
+enum LoadingStatus {
+  completed,
+  loading,
+  empty,
 }

@@ -1,37 +1,43 @@
 PODS:
   - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
   - package_info (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
-    - Flutter
-  - "permission_handler (5.1.0+2)":
     - Flutter
   - photo_manager (1.0.0):
     - Flutter
     - FlutterMacOS
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - Toast (4.0.0)
   - video_player (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
 
+SPEC REPOS:
+  trunk:
+    - Toast
+
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
   photo_manager:
     :path: ".symlinks/plugins/photo_manager/ios"
   shared_preferences_ios:
@@ -41,11 +47,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

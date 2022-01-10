@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/view_models/media_asset_view_model.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:orange_gallery/view_models/media_view_model.dart';
 
 class SelectorProvider extends ChangeNotifier {
   bool _isSelectMode = false;
-  List<MediaAssetViewModel> _selections = [];
+  List<MediaViewModel> _selections = [];
 
   ///Check selection Mode is on/off
   ///
@@ -15,7 +14,8 @@ class SelectorProvider extends ChangeNotifier {
   }
 
   ///Return all assets in selections
-  List<MediaAssetViewModel> get selections {
+  List<MediaViewModel> get selections {
+    notifyListeners();
     return _selections;
   }
 
@@ -29,17 +29,17 @@ class SelectorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleSelectModeO() {
-    _isSelectMode = !_isSelectMode;
+  void toggleSelectModeOn() {
+    _isSelectMode = true;
     notifyListeners();
   }
 
   ///Add new asset to selections and also check and toggle SelectMode on.
-  void addSelection(MediaAssetViewModel asset) {
+  void addSelection(MediaViewModel asset) {
     if (!_isSelectMode) {
       _toggleSelectMode();
     }
-    if (_selections.contains(asset)) {
+    if (isInSelections([asset])) {
       removeSelections([asset]);
     } else {
       _selections.add(asset);
@@ -47,14 +47,14 @@ class SelectorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addAllSelection(List<MediaAssetViewModel> assets) {
+  void addAllSelection(List<MediaViewModel> assets) {
     if (!_isSelectMode) {
       _toggleSelectMode();
     }
-    if (assets.every((element) => _selections.contains(element))) {
+    if (isInSelections(assets)) {
       removeSelections(assets);
     } else {
-      assets.where((asset) => _selections.contains(asset)).forEach((item) {
+      assets.where((asset) => isInSelections([asset])).forEach((item) {
         _selections.remove(item);
       });
       _selections.addAll(assets);
@@ -62,8 +62,10 @@ class SelectorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isInSelections(List<MediaAssetViewModel> assets) {
-    if (assets.every((asset) => _selections.contains(asset))) {
+  bool isInSelections(List<MediaViewModel> assets) {
+    if (assets.every(
+      (asset) => _selections.map((e) => e.id).toList().contains(asset.id),
+    )) {
       return true;
     }
     return false;
@@ -71,8 +73,8 @@ class SelectorProvider extends ChangeNotifier {
 
   ///Remove asset from list selections
   ///and toggle SelectMode off if none of selections left.
-  void removeSelections(List<MediaAssetViewModel> assets) {
-    for (MediaAssetViewModel asset in assets) {
+  void removeSelections(List<MediaViewModel> assets) {
+    for (MediaViewModel asset in assets) {
       _selections.remove(asset);
     }
     if (_selections.isEmpty) {
@@ -83,7 +85,11 @@ class SelectorProvider extends ChangeNotifier {
 
   ///Clear all selections and turn of SelectMode
   void clearSelection() {
-    _selections.clear();
-    _toggleSelectMode();
+    if (_selections.isNotEmpty) {
+      _selections.clear();
+      _toggleSelectMode();
+    } else if (_isSelectMode) {
+      _toggleSelectMode();
+    }
   }
 }

@@ -1,11 +1,35 @@
 {
     "notice": {
         "empty": "Hiện tại chưa có nội dung nào.",
-        "missing_permission": "Tôi cần bạn cấp quyền để có thể truy cập hình ảnh và video trong máy."
+        "missing_permission": "Tôi cần bạn cấp quyền để có thể truy cập hình ảnh và video trong máy.",
+        "delete_dialog": {
+            "title":{
+                "zero": "Lỗi",
+                "one" : "Xóa {} mục vào thùng rác?",
+                "two": "Xóa {} mục vào thùng rác?",
+                "many": "Xóa {} mục vào thùng rác?",
+                "other" : "Xóa {} mục vào thùng rác?"
+            },
+            "content": "Những mục đã xóa sẽ không khôi phục lại. Bạn có chắc chắn về hành động này?"
+        },
+        "delete_album_fail": "Không thể xóa album này!"
     },
     "buttons":{
         "open_settings" : "Mở Cài Đặt",
-        "see_all":"Xem thêm"
+        "see_all":"Xem thêm",
+        "add_to_album": "Thêm vào Album",
+        "new_album" : "Thêm Album Mới",
+        "favorite": "Yêu thích",
+        "remove_favorite": "Hủy Yêu Thích",
+        "share":"Chia sẻ",
+        "delete":"Xóa",
+        "cancel": "Hủy",
+        "move" : "Chuyển Đi",
+        "select" : "Chọn",
+        "add_items" : "Thêm Phương Tiện",
+        "delete_album" : "Xóa Album",
+        "back" : "Quay lại",
+        "create" : "Tạo mới"
     },
     "photos": {
         "label": "Ảnh",
@@ -15,17 +39,32 @@
     "albums": {
         "label": "Albums",
         "title": "Album của tôi",
+        "last_modified":"Last modified at",
         "favorites": {
             "title": "Yêu Thích",
             "favorites_album": "Ảnh Yêu Thích"
         },
         "suggestions":"Mọi người",
-        "photo": {
+        "item": {
             "zero": "Trống",
             "one" : "{} Mục",
             "two": "{} Mục",
             "many": "{} Mục",
             "other" : "{} Mục"
+        },
+        "photo": {
+            "zero": "{} Ảnh",
+            "one" : "{} Ảnh",
+            "two": "{} Ảnh",
+            "many": "{} Ảnh",
+            "other" : "{} Ảnh"
+        },
+        "video": {
+            "zero": "{} Video",
+            "one" : "{} Video",
+            "two": "{} Video",
+            "many": "{} Video",
+            "other" : "{} Video"
         }
     },
     "settings":{

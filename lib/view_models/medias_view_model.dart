@@ -2,25 +2,18 @@ import 'dart:typed_data';
 
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/models/media_asset.dart';
+import 'package:orange_gallery/models/media.dart';
 import 'package:orange_gallery/utils/constants.dart';
-import 'package:orange_gallery/view_models/media_asset_view_model.dart';
+import 'package:orange_gallery/view_models/media_view_model.dart';
+import 'package:orange_gallery/widgets/custom_delete_dialog.dart';
 import 'package:path/path.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Directory, File, Platform;
 
 import 'package:photo_manager/photo_manager.dart';
 
-enum LoadingStatus {
-  completed,
-  loading,
-  empty,
-}
-
 class MediasViewModel extends ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
-  // List<AssetPathEntity> _albums = [];
-  List<MediaAssetViewModel> _mediaAssets = [];
+  List<MediaViewModel> _mediaAssets = [];
 
   void fetchAllMedias() async {
     loadingStatus = LoadingStatus.loading;
@@ -39,8 +32,8 @@ class MediasViewModel extends ChangeNotifier {
     _mediaAssets.clear();
     _mediaAssets = assets
         .map(
-          (asset) => MediaAssetViewModel(
-            mediaAsset: MediaAsset.fromAsset(asset),
+          (asset) => MediaViewModel(
+            mediaAsset: Media.fromAsset(asset),
           ),
         )
         .toList();
@@ -58,8 +51,43 @@ class MediasViewModel extends ChangeNotifier {
     // fetchAssets();
   }
 
-  List<MediaAssetViewModel> get mediaAssets {
+  List<MediaViewModel> get mediaAssets {
     return _mediaAssets;
+  }
+
+  Future<bool> deleteAssets(
+      List<MediaViewModel> assets, BuildContext context) async {
+    List<String> ids = assets.map((e) => e.id).toList();
+    if (Platform.isIOS) {
+      final deletedIDs = await PhotoManager.editor.deleteWithIds(ids);
+      if (deletedIDs.isEmpty) {
+        return false;
+      }
+      assets.every((element) => mediaAssets.remove(element));
+      notifyListeners();
+      return true;
+    } else if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return CustomDeleteDialog(
+            mediasDeleteCount: assets.length,
+          );
+        },
+      ).then(
+        (result) async {
+          if (result == ConfirmAction.Accept) {
+            assets.every((element) => mediaAssets.remove(element));
+            notifyListeners();
+            await PhotoManager.editor.deleteWithIds(ids);
+            return true;
+          } else {
+            return false;
+          }
+        },
+      );
+    }
+    return false;
   }
 
   // void _saveAsset(AssetEntity asset, String path, File file) {

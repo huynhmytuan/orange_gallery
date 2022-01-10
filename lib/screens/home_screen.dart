@@ -2,15 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-
+import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
 
+import 'package:orange_gallery/view_models/media_view_model.dart';
+import 'package:orange_gallery/view_models/medias_view_model.dart';
 import 'package:orange_gallery/utils/constants.dart';
+import 'package:orange_gallery/widgets/bottom_tool_bar.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/screens/album/albums_overview_screen.dart';
-
 import 'package:orange_gallery/screens/photo/photos_screen.dart';
 import 'package:orange_gallery/screens/setting/setting_screen.dart';
 
@@ -29,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       'title': 'photos.label',
       'icon': CupertinoIcons.photo_on_rectangle,
-      'screen': PhotosScreen(), //CustomGridView(),
+      'screen': PhotosScreen(),
     },
     {
       'title': 'albums.label',
@@ -74,36 +75,30 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: Consumer<SelectorProvider>(
         builder: (context, selectorProvider, child) {
-          return PageTransitionSwitcher(
-            duration: const Duration(milliseconds: 1),
-            transitionBuilder: (Widget child, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
-              return SharedAxisTransition(
-                child: child,
-                animation: animation,
-                secondaryAnimation: secondaryAnimation,
-                transitionType: SharedAxisTransitionType.vertical,
-              );
-            },
-            child: (selectorProvider.isSelectMode)
-                ? Container(
-                    color: Colors.transparent,
-                    child: SafeArea(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        child: Text('data'),
-                      ),
-                    ),
-                  )
-                : _buildAppBar(),
+          return AnimatedCrossFade(
+            firstChild: _buildBottomAppBar(),
+            secondChild: BottomToolBar(
+              onAddPressed: () {},
+              onFavoritePressed: () {},
+              onSharePressed: () {},
+              onDeletePressed: () async {
+                List<MediaViewModel> selections = selectorProvider.selections;
+                final mediasAssetViewModel =
+                    Provider.of<MediasViewModel>(context, listen: false);
+                mediasAssetViewModel.deleteAssets(selections, context);
+              },
+            ),
+            crossFadeState: (selectorProvider.isSelectMode)
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
           );
         },
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildBottomAppBar() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).bottomAppBarColor,

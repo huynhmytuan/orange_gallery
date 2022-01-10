@@ -18,7 +18,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: MediaQuery.of(context).size.height * .15,
+      expandedHeight: 150,
       floating: false,
       pinned: true,
       actions: widget.actions,
