@@ -14,6 +14,7 @@ import 'package:orange_gallery/widgets/grouped_grid.dart';
 import 'package:provider/provider.dart';
 
 class PhotosScreen extends StatefulWidget {
+  static const routeName = '/photos-screen';
   const PhotosScreen({Key? key}) : super(key: key);
 
   @override
@@ -63,7 +64,7 @@ class _PhotosScreenState extends State<PhotosScreen> {
   Widget _buildPhotosView(MediasViewModel mediasViewModel) {
     switch (mediasViewModel.loadingStatus) {
       case LoadingStatus.empty:
-        return const EmptyScreen();
+        return const EmptyHandlerWidget();
       case LoadingStatus.completed:
         return GroupedGridView(assets: mediasViewModel.mediaAssets);
       default:

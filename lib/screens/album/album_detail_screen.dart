@@ -2,18 +2,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:orange_gallery/screens/common/empty_screen.dart';
+import 'package:orange_gallery/screens/common/media_picker_screen.dart';
+
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/utils/constants.dart';
+
 import 'package:orange_gallery/view_models/album_view_model.dart';
 import 'package:orange_gallery/view_models/albums_view_model.dart';
 import 'package:orange_gallery/view_models/media_view_model.dart';
 import 'package:orange_gallery/view_models/medias_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
+import 'package:orange_gallery/widgets/album_name_input_dialog.dart';
 import 'package:orange_gallery/widgets/grouped_grid.dart';
 
 import 'package:provider/provider.dart';
 
 class AlbumDetailScreen extends StatelessWidget {
+  static const routeName = '/album-detail';
   String albumId;
   AlbumDetailScreen({required this.albumId, Key? key}) : super(key: key);
   AlbumViewModel? album;
@@ -28,7 +33,7 @@ class AlbumDetailScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const EmptyScreen(),
+            const EmptyHandlerWidget(),
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop(false);
@@ -46,18 +51,23 @@ class AlbumDetailScreen extends StatelessWidget {
           ];
         },
         body: FutureBuilder<List<MediaViewModel>>(
-          future: album!.allMedias,
-          builder: (context, snapshot) => (snapshot.hasData)
-              ? GroupedGridView(assets: snapshot.data!)
-              : const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-        ),
+            future: album!.allMedias,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.isEmpty) {
+                  return const EmptyHandlerWidget();
+                }
+                return GroupedGridView(assets: snapshot.data!);
+              }
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }),
       ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context, AlbumsViewModel albumProvider) {
+  Widget _buildAppBar(BuildContext context, AlbumsViewModel albumsViewModel) {
     return Consumer<SelectorProvider>(
       builder: (context, selector, child) {
         return SliverAppBar(
@@ -101,20 +111,20 @@ class AlbumDetailScreen extends StatelessWidget {
                     itemBuilder: (context) {
                       {
                         return [
+                          //Button: Remove Media From ALbum
                           PopupMenuItem(
-                            onTap: () {
-                              Provider.of<MediasViewModel>(context,
-                                      listen: false)
-                                  .deleteAssets(selector.selections, context)
-                                  .then((isDeleted) {
-                                if (isDeleted) {
-                                  if (album!.mediaCount == 0) {
-                                    Navigator.pop(context);
-                                  }
-                                }
-                                selector.clearSelection();
-                              });
-                            },
+                            value: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(tr('buttons.remove_from_album')),
+                                const Icon(Icons.remove_circle_outline_rounded),
+                              ],
+                            ),
+                          ),
+                          //Button: Delete Media From ALbum
+                          PopupMenuItem(
+                            value: 2,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -123,16 +133,9 @@ class AlbumDetailScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                          //Button: add selections to new album
                           PopupMenuItem(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(tr('buttons.move')),
-                                const Icon(Icons.arrow_circle_up_outlined),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem(
+                            value: 3,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -142,6 +145,61 @@ class AlbumDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ];
+                      }
+                    },
+                    onSelected: (value) {
+                      switch (value) {
+                        case 1: // Case Remove Media From ALbum
+                          Provider.of<AlbumsViewModel>(context, listen: false)
+                              .removeMediaInAlbum(selector.selections, album!)
+                              .then(
+                            (isRemoved) {
+                              if (isRemoved) {
+                                if (album!.mediaCount == 0) {
+                                  Navigator.pop(context);
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: tr('notice.remove_media_fail'));
+                              }
+                              selector.clearSelection();
+                            },
+                          );
+                          break;
+                        case 2: //Delete Media From ALbum
+                          Provider.of<MediasViewModel>(context, listen: false)
+                              .deleteAssets(selector.selections, context)
+                              .then(
+                            (isRemoved) {
+                              if (isRemoved) {
+                                if (album!.mediaCount == 0) {
+                                  Navigator.pop(context);
+                                }
+                              }
+                              selector.clearSelection();
+                            },
+                          );
+                          break;
+                        case 3: // Case create new album from selections.
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => CustomTextInputDialog(),
+                          ).then(
+                            (albumName) {
+                              if (albumName != null) {
+                                albumsViewModel
+                                    .createAlbum(albumName, selector.selections)
+                                    .then(
+                                  (value) {
+                                    selector.clearSelection();
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              }
+                            },
+                          );
+                          break;
+                        default:
                       }
                     },
                   )
@@ -161,19 +219,23 @@ class AlbumDetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (!album!.isAll)
-                          PopupMenuItem(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(tr('buttons.add_items')),
-                                const Icon(Icons.add_photo_alternate_outlined),
-                              ],
-                            ),
+                        // if (!album!.isAll)
+                        //Button: Add Item to album
+                        PopupMenuItem(
+                          value: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(tr('buttons.add_items')),
+                              const Icon(Icons.add_photo_alternate_outlined),
+                            ],
                           ),
+                        ),
                         PopupMenuItem(
                           onTap: () {
-                            albumProvider.deleteAlbum(album!).then((isDeleted) {
+                            albumsViewModel
+                                .deleteAlbum(album!)
+                                .then((isDeleted) {
                               if (isDeleted) {
                                 Navigator.of(context).pop();
                               } else {
@@ -191,7 +253,34 @@ class AlbumDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ];
-                    })
+                    },
+                    onSelected: (value) {
+                      //Case add medias to album
+                      if (value == 2) {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (ctx) => MediaPickerScreen(
+                            actionName: tr('buttons.add'),
+                            action: () {
+                              List<MediaViewModel> selections =
+                                  selector.selections;
+                              albumsViewModel
+                                  .addMediasToAlbum(
+                                selections,
+                                album!,
+                              )
+                                  .then((value) {
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                        ).then((value) {
+                          selector.clearSelection();
+                        });
+                      }
+                    },
+                  )
           ],
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
@@ -203,9 +292,14 @@ class AlbumDetailScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    album!.albumName,
-                    style: MyThemes.textTheme.headline5,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      album!.albumName,
+                      style: MyThemes.textTheme.headline5,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   if (album!.lastModifiedTime != null)
                     Text(

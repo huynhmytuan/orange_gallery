@@ -1,5 +1,6 @@
 {
     "notice": {
+        "preparing_file" : "Đang chuẩn bị file",
         "empty": "Hiện tại chưa có nội dung nào.",
         "missing_permission": "Tôi cần bạn cấp quyền để có thể truy cập hình ảnh và video trong máy.",
         "delete_dialog": {
@@ -12,13 +13,22 @@
             },
             "content": "Những mục đã xóa sẽ không khôi phục lại. Bạn có chắc chắn về hành động này?"
         },
-        "delete_album_fail": "Không thể xóa album này!"
+        "delete_album_fail": "Không thể xóa album này!",
+        "create_album_fail": "Có lỗi trong quá trình tạo album!",
+        "remove_media_fail": "Không thể xóa khỏi album này!",
+        "create_album_dialog" : {
+            "title" : "Tạo album mới",
+            "text_hint" : "Tên album"
+        },
+        "selected": "Đã chọn",
+        "add_to": "Thêm vào"
     },
     "buttons":{
         "open_settings" : "Mở Cài Đặt",
         "see_all":"Xem thêm",
         "add_to_album": "Thêm vào Album",
         "new_album" : "Thêm Album Mới",
+        "remove_from_album": "Xóa khỏi Album",
         "favorite": "Yêu thích",
         "remove_favorite": "Hủy Yêu Thích",
         "share":"Chia sẻ",
@@ -29,7 +39,8 @@
         "add_items" : "Thêm Phương Tiện",
         "delete_album" : "Xóa Album",
         "back" : "Quay lại",
-        "create" : "Tạo mới"
+        "create" : "Tạo",
+        "add": "Thêm"
     },
     "photos": {
         "label": "Ảnh",

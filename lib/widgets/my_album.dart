@@ -59,7 +59,7 @@ class MyAlbum extends StatelessWidget {
                       if (file == null) {
                         return const Center(
                           child: Icon(
-                            CupertinoIcons.cube_box,
+                            CupertinoIcons.square_stack_3d_down_dottedline,
                             size: 60,
                             color: greyColor60,
                           ),

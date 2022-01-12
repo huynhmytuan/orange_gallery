@@ -1,15 +1,21 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:orange_gallery/models/media.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class MediaViewModel {
+class MediaViewModel extends ChangeNotifier {
   Media _media;
+
   MediaViewModel({required Media mediaAsset}) : _media = mediaAsset;
 
   String get id {
     return _media.id;
+  }
+
+  AssetEntity get fullData {
+    return _media.asset;
   }
 
   Future<Uint8List?> get thumbnail {
@@ -32,6 +38,10 @@ class MediaViewModel {
   Future<File?> get file {
     // return _mediaAsset.assetFile;
     return _media.asset.file;
+  }
+
+  bool get isFavorite {
+    return _media.asset.isFavorite;
   }
 
   AssetType get mediaType {

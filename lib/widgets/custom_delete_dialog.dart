@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:orange_gallery/utils/constants.dart';
 
-import '../theme.dart';
+import 'package:orange_gallery/theme.dart';
+import 'package:orange_gallery/utils/constants.dart';
 
 class CustomDeleteDialog extends StatelessWidget {
   final int mediasDeleteCount;
@@ -23,8 +22,8 @@ class CustomDeleteDialog extends StatelessWidget {
         children: [
           LottieBuilder.asset(
             'assets/images/icon_delete.json',
-            width: 100,
-            height: 100,
+            width: 90,
+            height: 90,
           ),
           const SizedBox(height: 5),
           Text(

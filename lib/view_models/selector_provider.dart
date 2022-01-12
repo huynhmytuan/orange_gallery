@@ -15,7 +15,6 @@ class SelectorProvider extends ChangeNotifier {
 
   ///Return all assets in selections
   List<MediaViewModel> get selections {
-    notifyListeners();
     return _selections;
   }
 

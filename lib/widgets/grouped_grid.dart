@@ -1,19 +1,16 @@
-import 'dart:typed_data';
-import 'package:orange_gallery/utils/string_extension.dart';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 
+import 'package:orange_gallery/utils/constants.dart';
+import 'package:orange_gallery/widgets/asset_thumbnail.dart';
+import 'package:orange_gallery/utils/string_extension.dart';
 import 'package:orange_gallery/screens/common/gallery_view_screen.dart';
 import 'package:orange_gallery/view_models/media_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/theme.dart';
-
-import '../utils/constants.dart';
 
 class GroupedGridView extends StatelessWidget {
   List<MediaViewModel> assets;
@@ -42,6 +39,8 @@ class GroupedGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<List<MediaViewModel>> results = _getSeparatedList(assets);
+    final selectorProvider =
+        Provider.of<SelectorProvider>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(2),
       child: MediaQuery.removePadding(
@@ -110,15 +109,25 @@ class GroupedGridView extends StatelessWidget {
                     return AssetThumbnail(
                       asset: results[index][itemIndex],
                       onTap: () {
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            opaque: false,
-                            pageBuilder: (_, _1, _2) => GalleryViewScreen(
-                              assets: assets,
-                              index: assets.indexOf(results[index][itemIndex]),
+                        if (selectorProvider.isSelectMode) {
+                          selectorProvider
+                              .addSelection(results[index][itemIndex]);
+                        } else {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (_, _1, _2) => GalleryViewScreen(
+                                assets: assets,
+                                index:
+                                    assets.indexOf(results[index][itemIndex]),
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      },
+                      onLongPress: () {
+                        selectorProvider
+                            .addSelection(results[index][itemIndex]);
                       },
                     );
                     // );
@@ -129,106 +138,6 @@ class GroupedGridView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class AssetThumbnail extends StatelessWidget {
-  final Function? onTap;
-  final Function? onLongPress;
-  final MediaViewModel asset;
-
-  const AssetThumbnail({
-    Key? key,
-    required this.asset,
-    this.onTap,
-    this.onLongPress,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final selectorProvider =
-        Provider.of<SelectorProvider>(context, listen: false);
-    return FutureBuilder<Uint8List?>(
-      future: asset.thumbnail,
-      builder: (_, snapshot) {
-        final bytes = snapshot.data;
-        if (!snapshot.hasData) {
-          return Container(
-            color: Theme.of(context).cardColor,
-          );
-        } else {
-          return InkWell(
-            excludeFromSemantics: true,
-            enableFeedback: true,
-            onTap: () {
-              if (selectorProvider.isSelectMode) {
-                selectorProvider.addSelection(asset);
-                HapticFeedback.selectionClick();
-              } else {
-                if (onTap != null) onTap!.call();
-              }
-            },
-            onLongPress: () {
-              selectorProvider.addSelection(asset);
-              if (onLongPress != null) onLongPress!.call();
-              HapticFeedback.lightImpact();
-            },
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Hero(
-                    tag: asset.id,
-                    child: Image.memory(bytes!, fit: BoxFit.cover),
-                  ),
-                ),
-                if (asset.mediaType == AssetType.video)
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 3, horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(.5),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Text(
-                        ''.formatDuration(asset.duration),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                Positioned.fill(
-                  child: Consumer<SelectorProvider>(
-                    builder: (context, selector, child) {
-                      if (selector.isInSelections([asset])) {
-                        return Container(
-                          alignment: Alignment.topRight,
-                          padding: const EdgeInsets.only(top: 5, right: 5),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(.3),
-                          ),
-                          child: const Icon(
-                            Icons.check_circle_rounded,
-                            color: orangeColor,
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
     );
   }
 }
