@@ -1,20 +1,24 @@
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:orange_gallery/screens/album/albums_view_all_screen.dart';
 import 'package:orange_gallery/screens/common/empty_screen.dart';
+import 'package:orange_gallery/screens/common/media_picker_screen.dart';
 import 'package:orange_gallery/view_models/album_view_model.dart';
 import 'package:orange_gallery/view_models/albums_view_model.dart';
-import 'package:orange_gallery/view_models/medias_view_model.dart';
-
 import 'package:orange_gallery/theme.dart';
+import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/widgets/custom_app_bar.dart';
-import 'package:orange_gallery/widgets/custom_text_input_dialog.dart';
+import 'package:orange_gallery/widgets/album_name_input_dialog.dart';
 import 'package:orange_gallery/widgets/my_album.dart';
 import 'package:orange_gallery/widgets/section_widget.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:provider/provider.dart';
 
 class AlbumsScreen extends StatelessWidget {
+  static const routeName = '/album-overview';
   const AlbumsScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,37 +26,25 @@ class AlbumsScreen extends StatelessWidget {
     double _screenHeight = MediaQuery.of(context).size.height;
     PageController _pageCon =
         PageController(viewportFraction: 0.8, initialPage: 1);
-    return NestedScrollView(
-      key: const PageStorageKey<String>('AlbumScreen'),
-      headerSliverBuilder: (context, value) {
-        return [
-          CustomAppBar(
-            title: tr('albums.title'),
-            actions: [
-              PopupMenuButton(itemBuilder: (context) {
-                return [
-                  const PopupMenuItem(
-                    child: Text('data'),
-                  ),
-                  PopupMenuItem(child: Text('data')),
-                  PopupMenuItem(child: Text('data')),
-                ];
-              })
-            ],
-          ),
-        ];
-      },
-      body: ListView(
-        // child: Wrap(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildFavorites(context),
-          _buildAlbums(_screenHeight, context),
-          _buildSuggestions(),
-        ],
-        // ),
-      ),
-    );
+    return LayoutBuilder(builder: (context, contain) {
+      return NestedScrollView(
+        key: const PageStorageKey<String>('AlbumScreen'),
+        headerSliverBuilder: (context, value) {
+          return [
+            CustomAppBar(
+              title: tr('albums.title'),
+            ),
+          ];
+        },
+        body: ListView(
+          children: [
+            _buildAlbums(_screenHeight, context),
+            _buildSuggestions(),
+          ],
+          // ),
+        ),
+      );
+    });
   }
 
   Widget _buildFavorites(BuildContext context) {
@@ -106,6 +98,37 @@ class AlbumsScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (ctx) => CustomTextInputDialog(),
+                ).then((albumName) {
+                  if (albumName != null) {
+                    showBottomSheet(
+                      context: context,
+                      builder: (context) => MediaPickerScreen(
+                        actionName: tr("buttons.add"),
+                        action: () {
+                          final selector = Provider.of<SelectorProvider>(
+                              context,
+                              listen: false);
+                          final selections = selector.selections;
+                          Provider.of<AlbumsViewModel>(context, listen: false)
+                              .createAlbum(albumName, selections)
+                              .then(
+                            (value) {
+                              if (!value) {
+                                Fluttertoast.showToast(
+                                    msg: tr('notice.create_album_fail'));
+                              }
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }).then(
+                  (value) {
+                    Provider.of<SelectorProvider>(context, listen: false)
+                        .clearSelection();
+                  },
                 );
               } else {
                 Navigator.of(context).push(
@@ -117,34 +140,31 @@ class AlbumsScreen extends StatelessWidget {
             },
           ),
           title: 'albums.title'.tr(),
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: (albums.isEmpty)
-                ? const EmptyScreen()
-                : SizedBox(
-                    height: sectionHeigh,
-                    child: GridView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: albums.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 6 / 5,
-                      ),
-                      itemBuilder: (context, index) {
-                        return MyAlbum(
-                          albumId: albums[index].id,
-                          albumName: albums[index].albumName,
-                          photoCount: albums[index].mediaCount,
-                          bannerImage: albums[index].albumBanner,
-                        );
-                      },
+          child: (albums.isEmpty)
+              ? const EmptyHandlerWidget()
+              : SizedBox(
+                  height: sectionHeigh,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: albums.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 6 / 5,
                     ),
+                    itemBuilder: (context, index) {
+                      return MyAlbum(
+                        albumId: albums[index].id,
+                        albumName: albums[index].albumName,
+                        photoCount: albums[index].mediaCount,
+                        bannerImage: albums[index].albumBanner,
+                      );
+                    },
                   ),
-          ),
+                ),
         );
       },
     );

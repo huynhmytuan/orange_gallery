@@ -1,5 +1,6 @@
 {
     "notice": {
+        "preparing_file" : "Preparing file",
         "empty": "No asset in here yet.",
         "missing_permission": "We need permission to access your photos, videos.",
         "delete_dialog": {
@@ -12,13 +13,22 @@
             },
             "content": "Once deleted can't be recovered. Are you sure about this action?"
         },
-        "delete_album_fail": "This album can not be delete!"
+        "delete_album_fail": "This album can not be delete!",
+        "create_album_fail": "Failed to create new album!",
+        "remove_media_fail": "Cannot remove media in this album",
+        "create_album_dialog" : {
+            "title" : "Create new album",
+            "text_hint" : "Album Name"
+        },
+        "selected": "Selected",
+        "add_to": "Add to"
     },
     "buttons":{
         "open_settings" : "Open App Settings",
         "see_all":"See All",
         "add_to_album": "Add to Album",
         "new_album" : "New Album",
+        "remove_from_album": "Remove",
         "favorite": "Add to favorite",
         "remove_favorite": "Remove Favorite",
         "share":"Share",
@@ -29,7 +39,8 @@
         "add_items" : "Add Items",
         "delete_album" : "Delete Album",
         "back" : "Back",
-        "create" : "Create"
+        "create" : "Create",
+        "add": "Add"
     },
     "photos": {
         "label": "Photos",

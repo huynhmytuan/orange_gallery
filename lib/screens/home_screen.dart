@@ -1,7 +1,15 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:orange_gallery/screens/album/albums_view_all_screen.dart';
+import 'package:orange_gallery/screens/common/album_chose.dart';
+import 'package:orange_gallery/view_models/albums_view_model.dart';
+import 'package:orange_gallery/widgets/album_name_input_dialog.dart';
+import 'package:orange_gallery/widgets/custom_delete_dialog.dart';
+import 'package:orange_gallery/widgets/loading_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
@@ -61,13 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageTransitionSwitcher(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 700),
         transitionBuilder: (child, animation, secondaryAnimation) {
           return SharedAxisTransition(
             child: child,
             animation: animation,
             secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.scaled,
+            transitionType: SharedAxisTransitionType.horizontal,
           );
         },
         child:
@@ -78,14 +86,73 @@ class _MyHomePageState extends State<MyHomePage> {
           return AnimatedCrossFade(
             firstChild: _buildBottomAppBar(),
             secondChild: BottomToolBar(
-              onAddPressed: () {},
-              onFavoritePressed: () {},
-              onSharePressed: () {},
+              onAddPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (ctx) => AlbumChose(
+                    selectionsMedia: selectorProvider.selections,
+                  ),
+                ).then((value) {
+                  if (value == 'create_new') {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => CustomTextInputDialog(),
+                    ).then(
+                      (albumName) {
+                        if (albumName != null) {
+                          Provider.of<AlbumsViewModel>(context, listen: false)
+                              .createAlbum(
+                                  albumName, selectorProvider.selections)
+                              .then(
+                            (value) {
+                              selectorProvider.clearSelection();
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AlbumsViewAllScreen(),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
+                    );
+                  }
+                });
+              },
+              onSharePressed: () {
+                showDialog(
+                    context: context, builder: (ctx) => const LoadingDialog());
+                Provider.of<MediasViewModel>(context, listen: false)
+                    .shareMedias(selectorProvider.selections)
+                    .then((value) => Navigator.of(context).pop());
+              },
               onDeletePressed: () async {
                 List<MediaViewModel> selections = selectorProvider.selections;
                 final mediasAssetViewModel =
                     Provider.of<MediasViewModel>(context, listen: false);
-                mediasAssetViewModel.deleteAssets(selections, context);
+                if (Platform.isIOS) {
+                  await mediasAssetViewModel
+                      .deleteAssets(selections, context)
+                      .then((value) => selectorProvider.clearSelection());
+                } else if (Platform.isAndroid) {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) {
+                      return CustomDeleteDialog(
+                        mediasDeleteCount: selections.length,
+                      );
+                    },
+                  ).then(
+                    (result) async {
+                      if (result == ConfirmAction.Accept) {
+                        await mediasAssetViewModel
+                            .deleteAssets(selections, context)
+                            .then((value) => selectorProvider.clearSelection());
+                      }
+                    },
+                  );
+                }
               },
             ),
             crossFadeState: (selectorProvider.isSelectMode)

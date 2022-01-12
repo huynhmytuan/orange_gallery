@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
+import 'package:orange_gallery/screens/album/album_detail_screen.dart';
+import 'package:orange_gallery/screens/album/albums_overview_screen.dart';
+import 'package:orange_gallery/screens/album/albums_view_all_screen.dart';
+import 'package:orange_gallery/screens/photo/photos_screen.dart';
+import 'package:orange_gallery/utils/navigator_service.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'package:orange_gallery/view_models/albums_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/screens/home_screen.dart';
 import 'package:orange_gallery/screens/common/missing_permission_screen.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/view_models/theme_provider.dart';
@@ -28,7 +33,7 @@ void main() async {
         Locale('vi', 'VI'),
       ],
       path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('vi', 'VI'),
       child: const MyApp(),
     ),
   );
@@ -91,6 +96,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, child) {
         final themeProvider = Provider.of<ThemeProvider>(context);
         return MaterialApp(
+          navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'Orange Gallery',
           themeMode: themeProvider.getThemeMode['value'],
@@ -106,7 +112,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               (_status) ? const MyHomePage() : const MissingPermissionScreen(),
           routes: {
             MyHomePage.routeName: (context) => const MyHomePage(),
-            // PhotosScreen.routeName: (context) => PhotosScreen(),
+            PhotosScreen.routeName: (context) => const PhotosScreen(),
+            AlbumsScreen.routeName: (context) => const AlbumsScreen(),
+            AlbumsViewAllScreen.routeName: (context) => AlbumsViewAllScreen(),
           },
         );
       },

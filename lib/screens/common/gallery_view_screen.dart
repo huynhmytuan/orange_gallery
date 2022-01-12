@@ -1,22 +1,30 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:easy_localization/src/easy_localization_app.dart';
+import 'package:orange_gallery/utils/constants.dart';
+import 'package:orange_gallery/widgets/custom_delete_dialog.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:orange_gallery/theme.dart';
-import 'package:orange_gallery/utils/string_extension.dart';
-import 'package:orange_gallery/view_models/media_view_model.dart';
-import 'package:orange_gallery/view_models/medias_view_model.dart';
-import 'package:orange_gallery/widgets/bottom_tool_bar.dart';
-import 'package:orange_gallery/widgets/hero.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
+
+import 'package:orange_gallery/screens/album/albums_view_all_screen.dart';
+import 'package:orange_gallery/screens/common/album_chose.dart';
+import 'package:orange_gallery/theme.dart';
+import 'package:orange_gallery/utils/string_extension.dart';
+import 'package:orange_gallery/view_models/albums_view_model.dart';
+import 'package:orange_gallery/view_models/media_view_model.dart';
+import 'package:orange_gallery/view_models/medias_view_model.dart';
+import 'package:orange_gallery/widgets/album_name_input_dialog.dart';
+import 'package:orange_gallery/widgets/bottom_tool_bar.dart';
+import 'package:orange_gallery/widgets/hero.dart';
+import 'package:orange_gallery/widgets/loading_dialog.dart';
 
 typedef DoubleClickAnimationListener = void Function();
 
@@ -88,6 +96,7 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
       _videoPlayerController?.pause(); // mute instantly
       _videoPlayerController?.dispose();
     }
+    PhotoManager.releaseCache();
     super.dispose();
   }
 
@@ -146,12 +155,13 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
     var position = await controller.position;
     final isEndOfClip = position!.inMilliseconds > 0 &&
         position.inMilliseconds + 500 >= duration.inMilliseconds;
-    setState(() {
-      _position = position;
-      _progress = position.inMilliseconds.ceilToDouble() /
-          duration.inMilliseconds.ceilToDouble();
-    });
-    // handle clip end
+    setState(
+      () {
+        _position = position;
+        _progress = position.inMilliseconds.ceilToDouble() /
+            duration.inMilliseconds.ceilToDouble();
+      },
+    );
     if (isEndOfClip) {
       _isPlaying = false;
       _playButtonAnimation.forward();
@@ -173,7 +183,9 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
 
   @override
   Widget build(BuildContext context) {
-    backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    backgroundColor = (isFullScreen)
+        ? Colors.black
+        : Theme.of(context).scaffoldBackgroundColor;
     final deviceSize = MediaQuery.of(context).size;
     return Material(
       color: Colors.transparent,
@@ -237,11 +249,8 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
         tag: media.id,
         slidePagekey: slidePageKey,
         slideType: SlideType.onlyImage,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            if (!snapshot.hasData)
-              FutureBuilder<Uint8List?>(
+        child: (!snapshot.hasData)
+            ? FutureBuilder<Uint8List?>(
                 future: media.thumbnail,
                 builder: (_, thumbnail) => (thumbnail.hasData)
                     ? Container(
@@ -256,9 +265,8 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
                         ),
                       )
                     : const CircularProgressIndicator.adaptive(),
-              ),
-            if (snapshot.hasData)
-              ExtendedImage.file(
+              )
+            : ExtendedImage.file(
                 snapshot.data!,
                 key: Key(media.id + 'image'),
                 clearMemoryCacheWhenDispose: true,
@@ -305,8 +313,6 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
                   _doubleClickAnimationController.forward();
                 },
               ),
-          ],
-        ),
       ),
     );
   }
@@ -419,7 +425,7 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
 
   PreferredSize _buildAppBar(Size deviceSize) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(50), // Set this height
+      preferredSize: const Size.fromHeight(50),
       child: StreamBuilder<bool>(
           initialData: true,
           stream: rebuildOverlay.stream,
@@ -483,17 +489,81 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
                           : const SizedBox(),
                     ),
                     BottomToolBar(
-                      onAddPressed: () {},
-                      onFavoritePressed: () {},
-                      onSharePressed: () {},
-                      onDeletePressed: () {
-                        Provider.of<MediasViewModel>(context, listen: false)
-                            .deleteAssets([widget.assets[currentIndex]],
-                                context).then((value) {
-                          if (value == 1) {
-                            Navigator.of(context).pop();
+                      onAddPressed: () {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (ctx) => AlbumChose(
+                            selectionsMedia: [widget.assets[currentIndex]],
+                          ),
+                        ).then((value) {
+                          if (value == 'create_new') {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => CustomTextInputDialog(),
+                            ).then(
+                              (albumName) {
+                                if (albumName != null) {
+                                  Provider.of<AlbumsViewModel>(context,
+                                          listen: false)
+                                      .createAlbum(albumName,
+                                          [widget.assets[currentIndex]]).then(
+                                    (value) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => AlbumsViewAllScreen(),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                            );
+                          }
+                          if (value == 'add_to_album') {
+                            Navigator.of(context).restorablePopAndPushNamed(
+                                AlbumsViewAllScreen.routeName);
                           }
                         });
+                      },
+                      onSharePressed: () async {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const LoadingDialog();
+                          },
+                        );
+                        Provider.of<MediasViewModel>(context, listen: false)
+                            .shareMedias([widget.assets[currentIndex]]).then(
+                                (value) => Navigator.pop(context));
+                      },
+                      onDeletePressed: () async {
+                        final media = widget.assets[currentIndex];
+                        final mediasAssetViewModel =
+                            Provider.of<MediasViewModel>(context,
+                                listen: false);
+                        if (Platform.isIOS) {
+                          await mediasAssetViewModel.deleteAssets([media],
+                              context).then((value) => Navigator.pop(context));
+                        } else if (Platform.isAndroid) {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return const CustomDeleteDialog(
+                                mediasDeleteCount: 1,
+                              );
+                            },
+                          ).then(
+                            (result) async {
+                              if (result == ConfirmAction.Accept) {
+                                await mediasAssetViewModel
+                                    .deleteAssets([media], context).then(
+                                        (value) => Navigator.pop(context));
+                              }
+                            },
+                          );
+                        }
                       },
                     ),
                   ],

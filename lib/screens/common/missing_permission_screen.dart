@@ -10,22 +10,50 @@ class MissingPermissionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error_outline,
-                size: 100,
-                color: greyColor60,
+      appBar: AppBar(
+        title: Wrap(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 25,
+              height: 25,
+            ),
+            const Text(
+              'Orange Gallery',
+              style: TextStyle(
+                fontFamily: 'Satisfy',
+                fontSize: 18,
               ),
-              Text(
+            ),
+          ],
+        ),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Flex(
+          direction: Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Flexible(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Icon(
+                  Icons.video_library_sharp,
+                  size: 100,
+                  color: greyColor60,
+                ),
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Text(
                 tr('notice.missing_permission'),
                 textAlign: TextAlign.center,
               ),
-              ElevatedButton(
+            ),
+            Flexible(
+              child: ElevatedButton(
                 onPressed: () {
                   PhotoManager.openSetting();
                 },
@@ -33,8 +61,8 @@ class MissingPermissionScreen extends StatelessWidget {
                   tr('buttons.open_settings'),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:path/path.dart';
 import 'dart:io' show Directory, File, Platform;
 
 import 'package:photo_manager/photo_manager.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MediasViewModel extends ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
@@ -51,44 +52,45 @@ class MediasViewModel extends ChangeNotifier {
     // fetchAssets();
   }
 
+  ///Return all medias in device.
   List<MediaViewModel> get mediaAssets {
     return _mediaAssets;
   }
 
+  ///Delete medias and return [true] if deleted.
   Future<bool> deleteAssets(
       List<MediaViewModel> assets, BuildContext context) async {
     List<String> ids = assets.map((e) => e.id).toList();
-    if (Platform.isIOS) {
-      final deletedIDs = await PhotoManager.editor.deleteWithIds(ids);
-      if (deletedIDs.isEmpty) {
-        return false;
-      }
-      assets.every((element) => mediaAssets.remove(element));
-      notifyListeners();
-      return true;
-    } else if (Platform.isAndroid) {
-      showDialog(
-        context: context,
-        builder: (ctx) {
-          return CustomDeleteDialog(
-            mediasDeleteCount: assets.length,
-          );
-        },
-      ).then(
-        (result) async {
-          if (result == ConfirmAction.Accept) {
-            assets.every((element) => mediaAssets.remove(element));
-            notifyListeners();
-            await PhotoManager.editor.deleteWithIds(ids);
-            return true;
-          } else {
-            return false;
-          }
-        },
-      );
+    final deletedIDs = await PhotoManager.editor.deleteWithIds(ids);
+    if (deletedIDs.isEmpty) {
+      return false;
     }
+    assets.every((element) => mediaAssets.remove(element));
+    fetchAllMedias();
+    return true;
+  }
+
+  Future<bool> shareMedias(List<MediaViewModel> medias) async {
+    List<String> filePaths = [];
+    for (MediaViewModel media in medias) {
+      File? mediaFile = await media.file;
+      if (mediaFile != null) {
+        String filePath = mediaFile.path;
+        filePaths.add(filePath);
+      }
+    }
+    await Share.shareFiles(filePaths).then((value) {
+      return true;
+    });
     return false;
   }
+
+  // Future<bool> addToFavorites(MediaViewModel media, bool isFavorite) async {
+  //   bool result = await PhotoManager.editor.iOS
+  //       .favoriteAsset(entity: media.fullData, favorite: !isFavorite);
+  //   notifyListeners();
+  //   return result;
+  // }
 
   // void _saveAsset(AssetEntity asset, String path, File file) {
   //   if (asset.type == AssetType.image) {
