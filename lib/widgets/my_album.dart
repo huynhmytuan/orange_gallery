@@ -30,7 +30,7 @@ class MyAlbum extends StatelessWidget {
       onTap: () {
         Navigator.of(context)
             .push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => AlbumDetailScreen(albumId: albumId),
           ),
         )

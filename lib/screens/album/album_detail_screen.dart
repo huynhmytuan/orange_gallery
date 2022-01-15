@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:orange_gallery/screens/common/empty_screen.dart';
+import 'package:orange_gallery/widgets/empty_%08handler_widget.dart';
 import 'package:orange_gallery/screens/common/media_picker_screen.dart';
 
 import 'package:orange_gallery/theme.dart';

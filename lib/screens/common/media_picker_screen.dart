@@ -3,12 +3,13 @@ import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:orange_gallery/screens/common/empty_screen.dart';
+
 import 'package:orange_gallery/theme.dart';
 import 'package:orange_gallery/view_models/media_view_model.dart';
 import 'package:orange_gallery/view_models/medias_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/widgets/asset_thumbnail.dart';
+import 'package:orange_gallery/widgets/empty_%08handler_widget.dart';
 import 'package:provider/provider.dart';
 
 ///Media Picker Screen for add media to album

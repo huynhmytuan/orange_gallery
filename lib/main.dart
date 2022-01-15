@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
-import 'package:orange_gallery/screens/album/album_detail_screen.dart';
 import 'package:orange_gallery/screens/album/albums_overview_screen.dart';
 import 'package:orange_gallery/screens/album/albums_view_all_screen.dart';
 import 'package:orange_gallery/screens/photo/photos_screen.dart';
