@@ -67,7 +67,7 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
   double _progress = 0.0;
   double opacity = 1.0;
   bool _isPlaying = false;
-  // double _updateProgressInterval = 0.0;
+  double _updateProgressInterval = 0.0;
   Duration? _duration;
   Duration? _position;
 
@@ -139,12 +139,13 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
 
   void _onControllerUpdated() async {
     if (_disposed) return;
-    // final now = DateTime.now().millisecondsSinceEpoch;
-    // if (_updateProgressInterval > now) {
-    //   return;
-    // }
-    // _updateProgressInterval = now + 200.0;
-
+    if (Platform.isAndroid) {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      if (_updateProgressInterval > now) {
+        return;
+      }
+      _updateProgressInterval = now + 200.0;
+    }
     final controller = _videoPlayerController;
     if (controller == null) return;
     if (!controller.value.isInitialized) return;
@@ -336,9 +337,10 @@ class _GalleryViewScreenState extends State<GalleryViewScreen>
           )
         : Center(
             child: AspectRatio(
-            aspectRatio: media.width / media.height,
-            child: const CircularProgressIndicator.adaptive(),
-          ));
+              aspectRatio: media.width / media.height,
+              child: const Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          );
     return ExtendedImageSlidePageHandler(
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),

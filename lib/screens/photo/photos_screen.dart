@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:orange_gallery/screens/common/empty_screen.dart';
 import 'package:orange_gallery/utils/constants.dart';
 
 import 'package:orange_gallery/view_models/medias_view_model.dart';
@@ -10,6 +9,7 @@ import 'package:orange_gallery/view_models/selector_provider.dart';
 import 'package:orange_gallery/theme.dart';
 
 import 'package:orange_gallery/widgets/custom_app_bar.dart';
+import 'package:orange_gallery/widgets/empty_%08handler_widget.dart';
 import 'package:orange_gallery/widgets/grouped_grid.dart';
 import 'package:provider/provider.dart';
 

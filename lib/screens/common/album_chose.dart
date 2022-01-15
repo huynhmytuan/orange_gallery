@@ -3,12 +3,12 @@ import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:orange_gallery/screens/common/empty_screen.dart';
 import 'package:orange_gallery/utils/constants.dart';
 import 'package:orange_gallery/view_models/album_view_model.dart';
 import 'package:orange_gallery/view_models/albums_view_model.dart';
 import 'package:orange_gallery/view_models/media_view_model.dart';
 import 'package:orange_gallery/view_models/selector_provider.dart';
+import 'package:orange_gallery/widgets/empty_%08handler_widget.dart';
 
 import 'package:provider/provider.dart';
 
